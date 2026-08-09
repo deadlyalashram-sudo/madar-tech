@@ -1,5 +1,5 @@
 const translations = {
-  "نستقبل طلبات المنطقة الشرقية": "Now accepting requests across the Eastern Province",
+  "نستقبل طلبات الجبيل الآن": "Now accepting requests in Jubail",
   "ضمانات الخدمة": "Service guarantees",
   "فحص قبل التنفيذ": "Inspect before work",
   "نعرف سبب المشكلة قبل اقتراح الحل.": "We identify the cause before recommending a solution.",
@@ -20,15 +20,14 @@ const translations = {
   "تقنيتك تعمل.": "Technology that works.",
   "وأنت مرتاح.": "Peace of mind included.",
   "تقنيتك تعمل.\nوأنت مرتاح.": "Technology that works.\nPeace of mind included.",
-  "تركيب وصيانة كاميرات المراقبة، أجهزة الكمبيوتر، الشبكات والسيرفرات في مدن المنطقة الشرقية.": "Installation and maintenance of CCTV, computers, networks, and servers across the Eastern Province.",
+  "تركيب وصيانة كاميرات المراقبة، أجهزة الكمبيوتر، الشبكات والسيرفرات في الجبيل.": "CCTV, computer, network, and server installation and maintenance in Jubail.",
   "اطلب معاينة": "Request an inspection",
   "تواصل واتساب": "WhatsApp us",
   "تشخيص واضح قبل التنفيذ": "Clear diagnosis before work begins",
   "تسليم مرتب واختبار كامل": "Organized handover and full testing",
   "دعم بعد الخدمة": "Post-service support",
   "مجالات تقنية متكاملة": "Integrated technical services",
-  "الشرقية": "Eastern Province",
-  "تغطية مرنة حسب المشروع": "Flexible coverage by project",
+  "نطاق الخدمة الأساسي حاليًا": "Our primary service area",
   "واضح": "Transparent",
   "عرض سعر قبل بدء العمل": "Quote before work begins",
   "خدماتنا": "Our services",
@@ -60,6 +59,7 @@ const translations = {
   "زيارة واحدة": "One visit",
   "فحص وصيانة": "Inspection and repair",
   "للمشكلة المحددة أو الجهاز الواحد.": "For a specific issue or a single device.",
+  "تبدأ من 99 ريال": "Starting from SAR 99",
   "تشخيص واضح": "Clear diagnosis",
   "عرض تكلفة قبل الإصلاح": "Cost approval before repair",
   "اختبار بعد التنفيذ": "Testing after completion",
@@ -77,9 +77,10 @@ const translations = {
   "متابعة الأعطال": "Issue follow-up",
   "تقارير بالأعمال المنفذة": "Service reports",
   "ناقش خطة دعم": "Discuss a support plan",
-  "من الجبيل إلى الخبر": "From Jubail to Khobar",
-  "نصل إليك في المنطقة الشرقية": "Serving the Eastern Province",
-  "الجبيل، الدمام، الخبر، الظهران، القطيف ورأس تنورة. وتتوفر تغطية مدن أخرى حسب موقع العميل وحجم العمل.": "Jubail, Dammam, Khobar, Dhahran, Qatif, and Ras Tanura. Other cities are available depending on location and project size.",
+  "نبدأ من الجبيل": "Starting in Jubail",
+  "خدمة محلية أقرب وأسرع": "Faster, more focused local service",
+  "نركّز حاليًا على الجبيل لتقديم مواعيد أوضح وخدمة أسرع. يمكن مناقشة المشاريع في المدن المجاورة حسب حجم العمل والموعد.": "We currently focus on Jubail for clearer appointments and faster service. Projects in nearby cities can be discussed based on scope and schedule.",
+  "الجبيل البلد": "Jubail City", "الجبيل الصناعية": "Jubail Industrial City", "الأحياء السكنية": "Residential areas", "المتاجر والمكاتب": "Shops and offices",
   "الجبيل": "Jubail", "الدمام": "Dammam", "الخبر": "Khobar", "الظهران": "Dhahran", "القطيف": "Qatif", "رأس تنورة": "Ras Tanura",
   "من المشكلة إلى التسليم": "From issue to handover",
   "أرسل التفاصيل": "Send the details",
@@ -110,7 +111,9 @@ const translations = {
   "نعم، نخدم المنازل والمتاجر والمكاتب والمنشآت الصغيرة والمتوسطة بحسب حجم ومتطلبات العمل.": "Yes. We serve homes, shops, offices, and small to medium businesses based on project requirements.",
   "هل يوجد دعم بعد التنفيذ؟": "Is post-service support available?",
   "نعم، تتم متابعة الملاحظات المتعلقة بالعمل المنفذ وفق نطاق الخدمة المتفق عليه.": "Yes. Feedback related to completed work is handled according to the agreed service scope.",
-  "حلول تقنية عملية للأفراد والمنشآت في المنطقة الشرقية.": "Practical technical solutions for homes and businesses in the Eastern Province.",
+  "خدمات تقنية عملية للأفراد والمنشآت في الجبيل.": "Practical technical services for homes and businesses in Jubail.",
+  "التواصل": "Contact", "واتساب مباشر": "Direct WhatsApp", "ساعات العمل": "Working hours", "السبت–الخميس": "Saturday–Thursday", "8:00 ص – 9:00 م": "8:00 AM – 9:00 PM",
+  "لا يبدأ العمل قبل توضيح النطاق والتكلفة وموافقة العميل.": "Work begins only after scope, pricing, and customer approval are confirmed.",
   "جميع الحقوق محفوظة": "All rights reserved"
 };
 
@@ -126,10 +129,10 @@ function translatePage(language) {
   document.documentElement.lang = language;
   document.documentElement.dir = english ? "ltr" : "rtl";
   document.body.classList.toggle("english", english);
-  document.title = english ? "Madar Tech | Technical Solutions in the Eastern Province" : "مدار التقنية | حلول تقنية في المنطقة الشرقية";
+  document.title = english ? "Madar Tech | Technical Services in Jubail" : "مدار التقنية | خدمات تقنية في الجبيل";
   document.querySelector('meta[name="description"]').content = english
-    ? "CCTV, computer, network, and server services across the Eastern Province."
-    : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في المنطقة الشرقية.";
+    ? "CCTV, computer, network, and server services in Jubail."
+    : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في الجبيل.";
 
   document.querySelectorAll("body *:not(script):not(style)").forEach((element) => {
     element.childNodes.forEach((node) => {

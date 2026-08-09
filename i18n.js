@@ -112,7 +112,7 @@ const translations = {
   "هل يوجد دعم بعد التنفيذ؟": "Is post-service support available?",
   "نعم، تتم متابعة الملاحظات المتعلقة بالعمل المنفذ وفق نطاق الخدمة المتفق عليه.": "Yes. Feedback related to completed work is handled according to the agreed service scope.",
   "خدمات تقنية عملية للأفراد والمنشآت في الجبيل.": "Practical technical services for homes and businesses in Jubail.",
-  "التواصل": "Contact", "واتساب مباشر": "Direct WhatsApp", "ساعات العمل": "Working hours", "السبت–الخميس": "Saturday–Thursday", "8:00 ص – 9:00 م": "8:00 AM – 9:00 PM",
+  "التواصل": "Contact", "واتساب مباشر": "Direct WhatsApp", "ساعات استقبال الطلبات": "Request hours", "السبت–الخميس": "Saturday–Thursday", "5:00 م – 12:00 ص": "5:00 PM – 12:00 AM",
   "لا يبدأ العمل قبل توضيح النطاق والتكلفة وموافقة العميل.": "Work begins only after scope, pricing, and customer approval are confirmed.",
   "جميع الحقوق محفوظة": "All rights reserved"
 };

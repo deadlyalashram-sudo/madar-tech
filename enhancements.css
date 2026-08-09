@@ -1,0 +1,60 @@
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+}
+
+.plan-grid article {
+  display: flex;
+  min-height: 370px;
+  padding: 32px;
+  flex-direction: column;
+  border-left: 1px solid var(--line);
+}
+
+.plan-grid article:last-child { border-left: 0; }
+.plan-grid article > span { color: var(--blue); font-size: 14px; font-weight: 700; }
+.plan-grid h3 { margin: 18px 0 4px; font-size: 27px; }
+.plan-grid p, .plan-grid li { color: var(--muted); line-height: 1.8; }
+.plan-grid ul { margin-bottom: 28px; padding-right: 18px; }
+.plan-grid a { margin-top: auto; padding: 12px; border: 1px solid var(--ink); text-align: center; font-weight: 700; }
+.plan-grid .featured { color: #fff; background: var(--ink); }
+.plan-grid .featured p, .plan-grid .featured li { color: #bdc7d0; }
+.plan-grid .featured a { border-color: var(--blue); background: var(--blue); }
+
+.faq-list { border-top: 1px solid var(--line); }
+.faq details { padding: 0 6px; border-bottom: 1px solid var(--line); }
+.faq summary { padding: 22px 0; cursor: pointer; list-style: none; font-size: 19px; font-weight: 700; }
+.faq summary::after { content: "+"; float: left; color: var(--blue); font-size: 24px; }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { max-width: 850px; margin: 0 0 22px; color: var(--muted); line-height: 1.8; }
+
+@media (max-width: 800px) {
+  .plan-grid { grid-template-columns: 1fr; }
+  .plan-grid article { border-left: 0; border-bottom: 1px solid var(--line); }
+  .plan-grid article:last-child { border-bottom: 0; }
+}
+
+.language-toggle {
+  min-width: 44px;
+  min-height: 40px;
+  border: 1px solid #ffffff55;
+  color: #fff;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.english { font-family: Arial, sans-serif; }
+.english .hero-content, .english input, .english select, .english textarea { direction: ltr; }
+.english .notice { border-right: 0; border-left: 3px solid var(--blue); }
+.english .plan-grid article { border-left: 0; border-right: 1px solid var(--line); }
+.english .plan-grid article:last-child { border-right: 0; }
+.english .plan-grid ul { padding-right: 0; padding-left: 18px; }
+.english .faq summary::after { float: right; }
+
+@media (max-width: 800px) {
+  .language-toggle { margin-inline-start: auto; }
+  .english .plan-grid article { border-right: 0; }
+}

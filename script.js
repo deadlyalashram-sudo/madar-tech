@@ -41,16 +41,28 @@ document.getElementById("heroWhatsapp").addEventListener("click", (event) => {
 document.getElementById("quoteForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
-  const message = [
-    `طلب عرض سعر - ${BUSINESS.name}`,
-    `الاسم: ${data.get("name")}`,
-    `الجوال: ${data.get("phone")}`,
-    `نوع العميل: ${data.get("customerType")}`,
-    `المدينة: ${data.get("city")}`,
-    `الخدمة: ${data.get("service")}`,
-    `الموعد المناسب: ${data.get("timing")}`,
-    `التفاصيل: ${data.get("details")}`,
-  ].join("\n");
+  const english = document.documentElement.lang === "en";
+  const message = english
+    ? [
+        "Quote request - Madar Tech",
+        `Name: ${data.get("name")}`,
+        `Mobile: ${data.get("phone")}`,
+        `Customer type: ${data.get("customerType")}`,
+        `City: ${data.get("city")}`,
+        `Service: ${data.get("service")}`,
+        `Preferred time: ${data.get("timing")}`,
+        `Details: ${data.get("details")}`,
+      ].join("\n")
+    : [
+        `طلب عرض سعر - ${BUSINESS.name}`,
+        `الاسم: ${data.get("name")}`,
+        `الجوال: ${data.get("phone")}`,
+        `نوع العميل: ${data.get("customerType")}`,
+        `المدينة: ${data.get("city")}`,
+        `الخدمة: ${data.get("service")}`,
+        `الموعد المناسب: ${data.get("timing")}`,
+        `التفاصيل: ${data.get("details")}`,
+      ].join("\n");
   const url = whatsappUrl(message);
   const status = document.getElementById("formStatus");
   if (!url) {

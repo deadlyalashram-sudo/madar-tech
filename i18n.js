@@ -125,6 +125,9 @@ function translatePage(language) {
   document.documentElement.dir = english ? "ltr" : "rtl";
   document.body.classList.toggle("english", english);
   document.title = english ? "Madar Tech | Technical Solutions in the Eastern Province" : "مدار التقنية | حلول تقنية في المنطقة الشرقية";
+  document.querySelector('meta[name="description"]').content = english
+    ? "CCTV, computer, network, and server services across the Eastern Province."
+    : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في المنطقة الشرقية.";
 
   document.querySelectorAll("body *:not(script):not(style)").forEach((element) => {
     element.childNodes.forEach((node) => {
@@ -146,12 +149,21 @@ function translatePage(language) {
   const toggle = document.getElementById("languageToggle");
   toggle.textContent = english ? "AR" : "EN";
   toggle.setAttribute("aria-label", english ? "التبديل إلى العربية" : "Switch to English");
+
+  document.querySelector(".brand").setAttribute("aria-label", english ? "Home" : "الرئيسية");
+  document.querySelector(".site-header nav").setAttribute("aria-label", english ? "Main navigation" : "التنقل الرئيسي");
+  document.getElementById("menuToggle").setAttribute("aria-label", english ? "Open menu" : "فتح القائمة");
+  document.querySelector(".hero img").alt = english
+    ? "Modern CCTV, networking, and server equipment"
+    : "كاميرات مراقبة وتجهيزات شبكات وسيرفرات حديثة";
+  document.querySelector(".metrics").setAttribute("aria-label", english ? "Service highlights" : "مزايا الخدمة");
+  document.querySelector(".promise-strip").setAttribute("aria-label", english ? "Service guarantees" : "ضمانات الخدمة");
 }
 
 document.getElementById("languageToggle").addEventListener("click", () => {
   currentLanguage = currentLanguage === "ar" ? "en" : "ar";
   localStorage.setItem("siteLanguage", currentLanguage);
-  translatePage(currentLanguage);
+  window.location.reload();
 });
 
 translatePage(currentLanguage);

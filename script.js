@@ -5,6 +5,27 @@ const BUSINESS = {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+const header = document.querySelector(".site-header");
+const menuToggle = document.getElementById("menuToggle");
+
+window.addEventListener("scroll", () => {
+  header.classList.toggle("scrolled", window.scrollY > 24);
+});
+
+menuToggle.addEventListener("click", () => {
+  const open = header.classList.toggle("menu-open");
+  menuToggle.setAttribute("aria-expanded", String(open));
+  menuToggle.textContent = open ? "×" : "☰";
+});
+
+document.querySelectorAll(".site-header nav a").forEach((link) => {
+  link.addEventListener("click", () => {
+    header.classList.remove("menu-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.textContent = "☰";
+  });
+});
+
 function whatsappUrl(message) {
   if (!BUSINESS.whatsapp) return null;
   return `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;

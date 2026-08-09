@@ -1,6 +1,6 @@
 const BUSINESS = {
   name: "مدار التقنية",
-  whatsapp: "", // ضع الرقم بصيغة 9665XXXXXXXX لتفعيل الإرسال المباشر
+  whatsapp: "966504556501",
 };
 
 document.getElementById("year").textContent = new Date().getFullYear();

@@ -50,7 +50,9 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
         `Customer type: ${data.get("customerType")}`,
         `City: ${data.get("city")}`,
         `Service: ${data.get("service")}`,
-        `Preferred time: ${data.get("timing")}`,
+        `Service method: ${data.get("visitType")}`,
+        `Preferred day: ${data.get("visitDay")}`,
+        `Preferred period: ${data.get("timing")}`,
         `Details: ${data.get("details")}`,
       ].join("\n")
     : [
@@ -60,7 +62,9 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
         `نوع العميل: ${data.get("customerType")}`,
         `المدينة: ${data.get("city")}`,
         `الخدمة: ${data.get("service")}`,
-        `الموعد المناسب: ${data.get("timing")}`,
+        `طريقة تقديم الخدمة: ${data.get("visitType")}`,
+        `اليوم المناسب: ${data.get("visitDay")}`,
+        `الفترة المناسبة: ${data.get("timing")}`,
         `التفاصيل: ${data.get("details")}`,
       ].join("\n");
   const url = whatsappUrl(message);

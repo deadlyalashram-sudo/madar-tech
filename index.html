@@ -86,7 +86,9 @@
         <label>نوع العميل<select name="customerType" required><option value="">اختر نوع العميل</option><option>فرد / منزل</option><option>متجر</option><option>مكتب أو شركة</option><option>منشأة أخرى</option></select></label>
         <label>المدينة<select name="city" required><option value="">اختر المدينة</option><option>الجبيل</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>القطيف</option><option>رأس تنورة</option><option>مدينة أخرى</option></select></label>
         <label>الخدمة<select name="service" required><option value="">اختر الخدمة</option><option>كاميرات المراقبة</option><option>صيانة الكمبيوتر</option><option>الشبكات والراوترات</option><option>السيرفرات والتخزين</option><option>أكثر من خدمة</option></select></label>
-        <label>الموعد المناسب<select name="timing" required><option value="">اختر الموعد</option><option>في أقرب وقت</option><option>خلال هذا الأسبوع</option><option>موعد آخر بالتنسيق</option></select></label>
+        <label>طريقة تقديم الخدمة<select name="visitType" required><option value="">اختر طريقة الخدمة</option><option>زيارة ميدانية للموقع</option><option>دعم عن بُعد</option><option>تسليم الجهاز للصيانة</option><option>أحتاج استشارة أولاً</option></select></label>
+        <label>اليوم المناسب<select name="visitDay" required><option value="">اختر اليوم المناسب</option><option>اليوم</option><option>غداً</option><option>خلال هذا الأسبوع</option><option>موعد آخر بالتنسيق</option></select></label>
+        <label>الفترة المناسبة<select name="timing" required><option value="">اختر الفترة</option><option>صباحاً (8 - 12)</option><option>ظهراً (12 - 4)</option><option>مساءً (4 - 9)</option><option>في أقرب وقت</option></select></label>
         <label class="full">تفاصيل الطلب<textarea name="details" required minlength="10" placeholder="اشرح المشكلة أو العمل المطلوب باختصار"></textarea></label>
         <button class="primary full" type="submit">إرسال الطلب عبر واتساب</button>
         <p class="form-status full" id="formStatus" role="status"></p>

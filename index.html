@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
-  <link rel="stylesheet" href="enhancements.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="enhancements.css?v=8">
 </head>
 <body>
   <header class="site-header">
@@ -62,9 +62,9 @@
     <section class="section plans" id="plans">
       <div class="section-heading"><p>خيارات الخدمة</p><h2>اختر مستوى الدعم المناسب</h2><span>التسعير النهائي يعتمد على المعاينة والقطع المطلوبة، ونوضحه لك قبل التنفيذ.</span></div>
       <div class="plan-grid">
-        <article><span>زيارة واحدة</span><h3>فحص وصيانة</h3><p>للمشكلة المحددة أو الجهاز الواحد.</p><strong class="starting-price">تبدأ من 99 ريال</strong><ul><li>تشخيص واضح</li><li>عرض تكلفة قبل الإصلاح</li><li>اختبار بعد التنفيذ</li></ul><a href="#quote">اطلب زيارة</a></article>
-        <article class="featured"><span>الأكثر طلبًا</span><h3>تجهيز متكامل</h3><p>للمنازل والمتاجر والمكاتب الجديدة.</p><ul><li>معاينة وتحديد الاحتياج</li><li>تركيب وضبط كامل</li><li>شرح وتسليم منظم</li></ul><a href="#quote">اطلب عرض سعر</a></article>
-        <article><span>للمنشآت</span><h3>دعم دوري</h3><p>متابعة تقنية مستمرة حسب الاتفاق.</p><ul><li>زيارات مجدولة</li><li>متابعة الأعطال</li><li>تقارير بالأعمال المنفذة</li></ul><a href="#quote">ناقش خطة دعم</a></article>
+        <article><span>زيارة واحدة</span><h3>فحص وصيانة</h3><p>للمشكلة المحددة أو الجهاز الواحد.</p><strong class="starting-price">تبدأ من 99 ريال</strong><ul><li>تشخيص واضح</li><li>عرض تكلفة قبل الإصلاح</li><li>اختبار بعد التنفيذ</li></ul><a href="#quote" data-request-type="visit">اطلب زيارة</a></article>
+        <article class="featured"><span>الأكثر طلبًا</span><h3>تجهيز متكامل</h3><p>للمنازل والمتاجر والمكاتب الجديدة.</p><ul><li>معاينة وتحديد الاحتياج</li><li>تركيب وضبط كامل</li><li>شرح وتسليم منظم</li></ul><a href="#quote" data-request-type="setup">اطلب عرض سعر</a></article>
+        <article><span>للمنشآت</span><h3>دعم دوري</h3><p>متابعة تقنية مستمرة حسب الاتفاق.</p><ul><li>زيارات مجدولة</li><li>متابعة الأعطال</li><li>تقارير بالأعمال المنفذة</li></ul><a href="#quote" data-request-type="support">ناقش خطة دعم</a></article>
       </div>
     </section>
 
@@ -88,7 +88,7 @@
         <label>الخدمة<select name="service" required><option value="">اختر الخدمة</option><option>كاميرات المراقبة</option><option>صيانة الكمبيوتر</option><option>الشبكات والراوترات</option><option>السيرفرات والتخزين</option><option>أكثر من خدمة</option></select></label>
         <label>طريقة تقديم الخدمة<select name="visitType" required><option value="">اختر طريقة الخدمة</option><option>زيارة ميدانية للموقع</option><option>دعم عن بُعد</option><option>تسليم الجهاز للصيانة</option><option>أحتاج استشارة أولاً</option></select></label>
         <label>اليوم المناسب<select name="visitDay" required><option value="">اختر اليوم المناسب</option><option>اليوم</option><option>غداً</option><option>خلال هذا الأسبوع</option><option>موعد آخر بالتنسيق</option></select></label>
-        <label>الفترة المناسبة<select name="timing" required><option value="">اختر الفترة</option><option>صباحاً (8 - 12)</option><option>ظهراً (12 - 4)</option><option>مساءً (4 - 9)</option><option>في أقرب وقت</option></select></label>
+        <label>الفترة المناسبة<select name="timing" required><option value="">اختر الفترة</option><option>مساءً (5 - 8)</option><option>مساءً (8 - 12)</option><option>في أقرب وقت خلال ساعات العمل</option></select></label>
         <label class="full">تفاصيل الطلب<textarea name="details" required minlength="10" placeholder="اشرح المشكلة أو العمل المطلوب باختصار"></textarea></label>
         <button class="primary full" type="submit">إرسال الطلب عبر واتساب</button>
         <p class="form-status full" id="formStatus" role="status"></p>
@@ -105,13 +105,17 @@
     </section>
   </main>
 
+  <a class="floating-whatsapp" id="floatingWhatsapp" href="https://wa.me/966504556501" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
+    <span aria-hidden="true">واتساب</span>
+  </a>
+
   <footer>
     <div class="footer-brand"><div class="brand"><span>م</span><strong>مدار التقنية</strong></div><p>خدمات تقنية عملية للأفراد والمنشآت في الجبيل.</p></div>
     <div class="footer-contact"><strong>التواصل</strong><a href="tel:+966504556501" dir="ltr">050 455 6501</a><a href="https://wa.me/966504556501" target="_blank" rel="noopener">واتساب مباشر</a></div>
     <div class="footer-hours"><strong>ساعات استقبال الطلبات</strong><span>السبت–الخميس</span><span>5:00 م – 12:00 ص</span></div>
     <div class="footer-legal"><span>© <b id="year"></b> جميع الحقوق محفوظة</span><small>لا يبدأ العمل قبل توضيح النطاق والتكلفة وموافقة العميل.</small></div>
   </footer>
-  <script src="i18n.js?v=7"></script>
-  <script src="script.js?v=7"></script>
+  <script src="i18n.js?v=8"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>

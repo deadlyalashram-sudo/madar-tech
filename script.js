@@ -38,10 +38,56 @@ document.getElementById("heroWhatsapp").addEventListener("click", (event) => {
   window.open(url, "_blank", "noopener");
 });
 
+document.getElementById("floatingWhatsapp").addEventListener("click", (event) => {
+  const english = document.documentElement.lang === "en";
+  const message = english
+    ? "Hello, I would like to ask about your technical services in Jubail."
+    : "السلام عليكم، أرغب بالاستفسار عن خدماتكم التقنية في الجبيل.";
+  event.preventDefault();
+  window.open(whatsappUrl(message), "_blank", "noopener");
+});
+
+const requestPresets = {
+  visit: {
+    visitTypeIndex: 1,
+    ar: "أرغب في طلب زيارة للفحص والتشخيص.",
+    en: "I would like to request an on-site inspection and diagnosis.",
+  },
+  setup: {
+    visitTypeIndex: 1,
+    ar: "أرغب في معاينة وتجهيز تقني متكامل.",
+    en: "I would like an inspection and complete technical setup.",
+  },
+  support: {
+    visitTypeIndex: 4,
+    ar: "أرغب في مناقشة خطة دعم تقني دوري للمنشأة.",
+    en: "I would like to discuss a recurring technical support plan.",
+  },
+};
+
+document.querySelectorAll("[data-request-type]").forEach((link) => {
+  link.addEventListener("click", () => {
+    const preset = requestPresets[link.dataset.requestType];
+    if (!preset) return;
+    const form = document.getElementById("quoteForm");
+    form.elements.visitType.selectedIndex = preset.visitTypeIndex;
+    form.elements.details.value = document.documentElement.lang === "en" ? preset.en : preset.ar;
+  });
+});
+
 document.getElementById("quoteForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
   const english = document.documentElement.lang === "en";
+  const localPhone = String(data.get("phone")).replace(/\s|-/g, "");
+  const status = document.getElementById("formStatus");
+  if (!/^(?:\+?9665|05)\d{8}$/.test(localPhone)) {
+    status.textContent = english
+      ? "Enter a valid Saudi mobile number, such as 05xxxxxxxx."
+      : "أدخل رقم جوال سعودي صحيح مثل 05xxxxxxxx.";
+    event.currentTarget.elements.phone.focus();
+    return;
+  }
   const message = english
     ? [
         "Quote request - Madar Tech",
@@ -68,7 +114,6 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
         `التفاصيل: ${data.get("details")}`,
       ].join("\n");
   const url = whatsappUrl(message);
-  const status = document.getElementById("formStatus");
   if (!url) {
     status.textContent = document.documentElement.lang === "en"
       ? "The website is ready. Add the business WhatsApp number in script.js to enable direct requests."

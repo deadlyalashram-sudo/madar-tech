@@ -210,6 +210,29 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
   cursor: pointer;
 }
 
+.floating-whatsapp {
+  position: fixed;
+  inset-inline-end: 22px;
+  bottom: 22px;
+  z-index: 30;
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: #0b7a45;
+  color: #fff;
+  box-shadow: 0 14px 35px rgba(7,21,37,.25);
+  font-weight: 700;
+  transition: transform .2s ease, background .2s ease;
+}
+.floating-whatsapp:hover { background: #08693b; transform: translateY(-2px); }
+
+@media (max-width: 480px) {
+  .floating-whatsapp { inset-inline: 16px; bottom: 14px; }
+}
+
 .english { font-family: Arial, sans-serif; }
 .english .hero-content, .english input, .english select, .english textarea { direction: ltr; }
 .english .notice { border-right: 0; border-left: 3px solid var(--blue); }

@@ -1,8 +1,3 @@
-const BUSINESS = {
-  name: "مدار التقنية",
-  whatsapp: "966504556501",
-};
-
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const header = document.querySelector(".site-header");
@@ -24,27 +19,6 @@ document.querySelectorAll(".site-header nav a").forEach((link) => {
     menuToggle.setAttribute("aria-expanded", "false");
     menuToggle.textContent = "☰";
   });
-});
-
-function whatsappUrl(message) {
-  if (!BUSINESS.whatsapp) return null;
-  return `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
-}
-
-document.getElementById("heroWhatsapp").addEventListener("click", (event) => {
-  const url = whatsappUrl("السلام عليكم، أرغب بالاستفسار عن خدماتكم التقنية.");
-  if (!url) return;
-  event.preventDefault();
-  window.open(url, "_blank", "noopener");
-});
-
-document.getElementById("floatingWhatsapp").addEventListener("click", (event) => {
-  const english = document.documentElement.lang === "en";
-  const message = english
-    ? "Hello, I would like to ask about your technical services in Jubail."
-    : "السلام عليكم، أرغب بالاستفسار عن خدماتكم التقنية في الجبيل.";
-  event.preventDefault();
-  window.open(whatsappUrl(message), "_blank", "noopener");
 });
 
 const requestPresets = {
@@ -88,40 +62,29 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
     event.currentTarget.elements.phone.focus();
     return;
   }
-  const message = english
-    ? [
-        "Quote request - Madar Tech",
-        `Name: ${data.get("name")}`,
-        `Mobile: ${data.get("phone")}`,
-        `Customer type: ${data.get("customerType")}`,
-        `City: ${data.get("city")}`,
-        `Service: ${data.get("service")}`,
-        `Service method: ${data.get("visitType")}`,
-        `Preferred day: ${data.get("visitDay")}`,
-        `Preferred period: ${data.get("timing")}`,
-        `Details: ${data.get("details")}`,
-      ].join("\n")
-    : [
-        `طلب عرض سعر - ${BUSINESS.name}`,
-        `الاسم: ${data.get("name")}`,
-        `الجوال: ${data.get("phone")}`,
-        `نوع العميل: ${data.get("customerType")}`,
-        `المدينة: ${data.get("city")}`,
-        `الخدمة: ${data.get("service")}`,
-        `طريقة تقديم الخدمة: ${data.get("visitType")}`,
-        `اليوم المناسب: ${data.get("visitDay")}`,
-        `الفترة المناسبة: ${data.get("timing")}`,
-        `التفاصيل: ${data.get("details")}`,
-      ].join("\n");
-  const url = whatsappUrl(message);
-  if (!url) {
-    status.textContent = document.documentElement.lang === "en"
-      ? "The website is ready. Add the business WhatsApp number in script.js to enable direct requests."
-      : "الموقع جاهز. أضف رقم واتساب العمل في ملف script.js لتفعيل إرسال الطلبات.";
-    return;
-  }
-  status.textContent = document.documentElement.lang === "en"
-    ? "Your request is ready. WhatsApp will open now."
-    : "تم تجهيز الطلب، سيتم فتح واتساب الآن.";
-  window.open(url, "_blank", "noopener");
+  const button = event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled = true;
+  status.textContent = english ? "Sending your request..." : "جارٍ إرسال طلبك...";
+  fetch("/api/requests", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: data.get("name"), phone: data.get("phone"),
+      customer_type: data.get("customerType"), city: data.get("city"),
+      service: data.get("service"), visit_type: data.get("visitType"),
+      visit_day: data.get("visitDay"), timing: data.get("timing"),
+      details: data.get("details"),
+    }),
+  }).then(async response => {
+    if (!response.ok) throw new Error("request_failed");
+    const result = await response.json();
+    status.innerHTML = english
+      ? `Request received. Your tracking number is <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">Track request</a>`
+      : `تم استلام طلبك. رقم المتابعة <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">متابعة الطلب</a>`;
+    event.currentTarget.reset();
+  }).catch(() => {
+    status.textContent = english
+      ? "We could not send the request. Please try again."
+      : "تعذر إرسال الطلب. حاول مرة أخرى.";
+  }).finally(() => { button.disabled = false; });
 });

@@ -241,6 +241,55 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 .english .plan-grid ul { padding-right: 0; padding-left: 18px; }
 .english .faq summary::after { float: right; }
 
+/* Service center and administration */
+.portal-body { min-height: 100vh; background: #eef3f8; color: var(--navy); }
+.portal-shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 64px; }
+.portal-shell.narrow { width: min(680px, calc(100% - 32px)); }
+.portal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+.portal-header a { color: var(--blue); font-weight: 700; }
+.portal-login { max-width: 560px; margin: 70px auto; padding: 38px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
+.portal-login h1, .admin-toolbar h1 { margin: 6px 0 10px; font-size: 34px; }
+.portal-login > p { color: var(--muted); }
+.portal-login form { display: grid; gap: 18px; margin-top: 28px; }
+.portal-login label { display: grid; gap: 8px; font-weight: 700; }
+.portal-login input { min-height: 50px; border: 1px solid var(--line); padding: 10px 14px; font: inherit; }
+.portal-login button { border: 0; min-height: 50px; font: inherit; font-weight: 700; cursor: pointer; }
+#loginStatus, #trackingStatus { min-height: 24px; color: #b42318; }
+.admin-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.toolbar-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.toolbar-actions select, .toolbar-actions button { min-height: 44px; padding: 0 14px; border: 1px solid #b9c6d3; background: #fff; font: inherit; cursor: pointer; }
+.admin-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+.admin-metrics div { display: grid; gap: 4px; padding: 20px; border: 1px solid var(--line); background: #fff; }
+.admin-metrics strong { font-size: 30px; }.admin-metrics span { color: var(--muted); }
+.request-list { display: grid; gap: 16px; }
+.request-card { padding: 26px; border: 1px solid var(--line); background: #fff; box-shadow: 0 8px 24px rgba(7,21,37,.06); }
+.request-card-head { display: flex; justify-content: space-between; gap: 20px; }
+.request-card-head > div { display: grid; gap: 5px; }.request-card-head span { color: var(--muted); font-size: 13px; }
+.request-card h2 { margin: 22px 0 6px; }.request-card > p { color: var(--muted); line-height: 1.8; }
+.request-card dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 20px 0; background: var(--line); border: 1px solid var(--line); }
+.request-card dl div { padding: 14px; background: #f8fafc; }.request-card dt { color: var(--muted); font-size: 12px; }.request-card dd { margin: 5px 0 0; font-weight: 700; }
+.request-actions { display: grid; grid-template-columns: 180px 1fr auto; gap: 10px; }
+.request-actions select, .request-actions textarea { border: 1px solid #b9c6d3; padding: 10px; font: inherit; }
+.request-actions textarea { min-height: 48px; resize: vertical; }.request-actions button { border: 0; padding: 0 20px; font: inherit; font-weight: 700; cursor: pointer; }
+.status-badge { display: inline-flex; width: fit-content; align-items: center; padding: 7px 11px; border: 1px solid; font-size: 13px; font-weight: 700; }
+.status-new { color: #175cd3; background: #eff8ff; }.status-contacted,.status-scheduled { color: #854a0e; background: #fffaeb; }.status-in_progress { color: #5925dc; background: #f4f3ff; }.status-completed { color: #067647; background: #ecfdf3; }.status-cancelled { color: #b42318; background: #fef3f2; }
+.tracking-card { margin-top: 28px; padding: 24px; border: 1px solid var(--line); background: #f8fafc; }.tracking-card h2 { direction: ltr; text-align: right; }
+.empty-state { padding: 70px 20px; text-align: center; background: #fff; color: var(--muted); border: 1px solid var(--line); }
+.form-status a { color: var(--blue); text-decoration: underline; }.form-status strong { display: inline-block; padding: 2px 5px; }
+
+@media (max-width: 760px) {
+  .portal-header, .admin-toolbar { align-items: stretch; flex-direction: column; }
+  .admin-metrics { grid-template-columns: 1fr 1fr; }
+  .request-card dl { grid-template-columns: 1fr 1fr; }
+  .request-actions { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .portal-login { margin: 24px auto; padding: 24px; }
+  .admin-metrics, .request-card dl { grid-template-columns: 1fr; }
+  .request-card { padding: 20px; }
+}
+
 @media (max-width: 800px) {
   .language-toggle { margin-inline-start: auto; }
   .english .plan-grid article { border-right: 0; }

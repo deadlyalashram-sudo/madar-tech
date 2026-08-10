@@ -2,3 +2,6 @@
 Thumbs.db
 .vscode/
 *.log
+madar_service.db
+__pycache__/
+.env

@@ -9,14 +9,25 @@ Bilingual Arabic and English one-page website for technical field services in Sa
 - Network and router configuration
 - Servers, NAS, and basic virtualization
 
-## Local preview
+## Integrated local server
 
-Run a static web server in this directory, then open the printed local URL.
+Run the API and website together:
 
 ```powershell
-python -m http.server 8082
+..\venv\Scripts\python.exe -m uvicorn server:app --host 127.0.0.1 --port 8082
 ```
+
+- Website: `http://127.0.0.1:8082/`
+- Customer tracking: `http://127.0.0.1:8082/track`
+- Administration: `http://127.0.0.1:8082/admin`
+- API docs: `http://127.0.0.1:8082/api/docs`
+
+Before production, set strong environment values for `MADAR_ADMIN_PASSWORD` and
+`MADAR_SESSION_SECRET`. The local development password is `ChangeMe123!`.
 
 ## Business configuration
 
-Set the business name and WhatsApp number in `script.js` before publishing.
+The public phone and WhatsApp links are configured in `index.html`. Customer
+requests are stored in the local SQLite database and managed from `/admin`.
+GitHub Pages can host only the static public page; production request tracking
+requires deploying `server.py` on a Python hosting service.

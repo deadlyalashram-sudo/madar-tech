@@ -1,0 +1,8 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+madar_service.db
+.env
+.venv
+venv

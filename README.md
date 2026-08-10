@@ -31,3 +31,5 @@ The public phone and WhatsApp links are configured in `index.html`. Customer
 requests are stored in the local SQLite database and managed from `/admin`.
 GitHub Pages can host only the static public page; production request tracking
 requires deploying `server.py` on a Python hosting service.
+
+See `DEPLOYMENT.md` for the free Koyeb deployment configuration.

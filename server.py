@@ -2,7 +2,6 @@ import hashlib
 import hmac
 import os
 import secrets
-import sqlite3
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -11,30 +10,37 @@ from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
+from sqlalchemy import create_engine, text
 
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = ROOT / "madar_service.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DB_PATH.as_posix()}")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 ADMIN_PASSWORD = os.getenv("MADAR_ADMIN_PASSWORD", "ChangeMe123!")
 SESSION_SECRET = os.getenv("MADAR_SESSION_SECRET", "local-development-secret").encode()
 SESSION_MAX_AGE = 8 * 60 * 60
+COOKIE_SECURE = os.getenv("MADAR_COOKIE_SECURE", "false").lower() == "true"
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 app = FastAPI(title="Madar Service Center", docs_url="/api/docs")
 app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
 
 
-def db() -> sqlite3.Connection:
-    connection = sqlite3.connect(DB_PATH)
-    connection.row_factory = sqlite3.Row
-    return connection
-
-
 def init_db() -> None:
-    with db() as connection:
-        connection.execute(
-            """
+    id_definition = (
+        "INTEGER PRIMARY KEY AUTOINCREMENT"
+        if DATABASE_URL.startswith("sqlite")
+        else "BIGSERIAL PRIMARY KEY"
+    )
+    with engine.begin() as connection:
+        connection.execute(text(f"""
             CREATE TABLE IF NOT EXISTS service_requests (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {id_definition},
                 ticket_code TEXT NOT NULL UNIQUE,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL,
@@ -50,8 +56,7 @@ def init_db() -> None:
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             )
-            """
-        )
+            """))
 
 
 init_db()
@@ -126,6 +131,13 @@ def home():
     return FileResponse(ROOT / "index.html")
 
 
+@app.get("/health")
+def health():
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
+    return {"status": "ok"}
+
+
 @app.get("/track")
 def tracking_page():
     return FileResponse(ROOT / "tracking.html")
@@ -148,30 +160,33 @@ def static_file(filename: str):
 def create_request(payload: ServiceRequestCreate):
     now = datetime.now(timezone.utc).isoformat()
     code = ticket_code()
-    with db() as connection:
-        connection.execute(
-            """
+    with engine.begin() as connection:
+        connection.execute(text("""
             INSERT INTO service_requests (
                 ticket_code, name, phone, customer_type, city, service,
                 visit_type, visit_day, timing, details, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (code, payload.name, payload.phone, payload.customer_type, payload.city,
-             payload.service, payload.visit_type, payload.visit_day, payload.timing,
-             payload.details, now, now),
-        )
+            ) VALUES (
+                :ticket_code, :name, :phone, :customer_type, :city, :service,
+                :visit_type, :visit_day, :timing, :details, :created_at, :updated_at
+            )
+            """), {
+                "ticket_code": code, "name": payload.name, "phone": payload.phone,
+                "customer_type": payload.customer_type, "city": payload.city,
+                "service": payload.service, "visit_type": payload.visit_type,
+                "visit_day": payload.visit_day, "timing": payload.timing,
+                "details": payload.details, "created_at": now, "updated_at": now,
+            })
     return {"ticket_code": code, "status": "new"}
 
 
 @app.get("/api/requests/track")
 def track_request(ticket_code: str, phone: str):
     normalized = phone.replace(" ", "").replace("-", "")
-    with db() as connection:
-        row = connection.execute(
+    with engine.connect() as connection:
+        row = connection.execute(text(
             "SELECT ticket_code, service, city, status, admin_note, created_at, updated_at, phone "
-            "FROM service_requests WHERE UPPER(ticket_code) = UPPER(?)",
-            (ticket_code,),
-        ).fetchone()
+            "FROM service_requests WHERE UPPER(ticket_code) = UPPER(:ticket_code)"
+        ), {"ticket_code": ticket_code}).mappings().first()
     if not row or not row["phone"].replace(" ", "").replace("-", "").endswith(normalized[-4:]):
         raise HTTPException(status_code=404, detail="Request not found")
     result = dict(row)
@@ -185,7 +200,7 @@ def admin_login(payload: AdminLogin, response: Response):
         raise HTTPException(status_code=401, detail="Incorrect password")
     response.set_cookie(
         "madar_admin", make_session(), max_age=SESSION_MAX_AGE,
-        httponly=True, samesite="strict", secure=False,
+        httponly=True, samesite="strict", secure=COOKIE_SECURE,
     )
     return {"ok": True}
 
@@ -200,13 +215,14 @@ def admin_logout(response: Response):
 def list_requests(request: Request, status_filter: str | None = None):
     require_admin(request)
     query = "SELECT * FROM service_requests"
-    params: tuple[str, ...] = ()
     if status_filter:
-        query += " WHERE status = ?"
-        params = (status_filter,)
+        query += " WHERE status = :status_filter"
+        params = {"status_filter": status_filter}
+    else:
+        params = {}
     query += " ORDER BY id DESC"
-    with db() as connection:
-        rows = connection.execute(query, params).fetchall()
+    with engine.connect() as connection:
+        rows = connection.execute(text(query), params).mappings().all()
     return [dict(row) for row in rows]
 
 
@@ -214,11 +230,14 @@ def list_requests(request: Request, status_filter: str | None = None):
 def update_request(request: Request, request_id: int, payload: RequestUpdate):
     require_admin(request)
     now = datetime.now(timezone.utc).isoformat()
-    with db() as connection:
-        result = connection.execute(
-            "UPDATE service_requests SET status = ?, admin_note = ?, updated_at = ? WHERE id = ?",
-            (payload.status, payload.admin_note, now, request_id),
-        )
+    with engine.begin() as connection:
+        result = connection.execute(text(
+            "UPDATE service_requests SET status = :status, admin_note = :admin_note, "
+            "updated_at = :updated_at WHERE id = :request_id"
+        ), {
+            "status": payload.status, "admin_note": payload.admin_note,
+            "updated_at": now, "request_id": request_id,
+        })
     if result.rowcount == 0:
         raise HTTPException(status_code=404, detail="Request not found")
     return {"ok": True}

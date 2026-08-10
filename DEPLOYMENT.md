@@ -1,5 +1,22 @@
 # Free cloud deployment
 
+## Render Blueprint
+
+The repository includes `render.yaml`, which creates the web service and its
+PostgreSQL database together.
+
+1. Open Render's **New Blueprint** page and connect this GitHub repository.
+2. Enter a strong value for `MADAR_ADMIN_PASSWORD` when prompted.
+3. Review the free plans, then apply the Blueprint.
+4. Wait for `/health` to report `{"status":"ok"}`.
+
+Render provides an `onrender.com` address and HTTPS automatically. Free web
+services sleep when idle, and the free PostgreSQL database is intended only
+for previews and currently expires after 30 days. Move to a persistent
+database before accepting real customer requests.
+
+## Manual deployment
+
 The project is ready for a Koyeb Web Service and PostgreSQL Database Service.
 
 ## Required environment variables

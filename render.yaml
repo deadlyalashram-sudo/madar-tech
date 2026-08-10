@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: madar-tech
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: madar-tech-db
+          property: connectionString
+      - key: MADAR_ADMIN_PASSWORD
+        sync: false
+      - key: MADAR_SESSION_SECRET
+        generateValue: true
+      - key: MADAR_COOKIE_SECURE
+        value: "true"
+      - key: PYTHON_VERSION
+        value: "3.12.11"
+
+databases:
+  - name: madar-tech-db
+    plan: free
+    region: frankfurt
+    databaseName: madar_tech
+    user: madar_tech

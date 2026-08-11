@@ -20,10 +20,38 @@ async function loadRequests() {
 }
 
 document.getElementById("loginForm").addEventListener("submit", async event => {
-  event.preventDefault(); const password = new FormData(event.currentTarget).get("password");
-  const response = await fetch("/api/admin/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
-  if (!response.ok) { document.getElementById("loginStatus").textContent="كلمة المرور غير صحيحة."; return; }
-  event.currentTarget.reset(); loadRequests();
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = document.getElementById("loginButton");
+  const statusMessage = document.getElementById("loginStatus");
+  const password = new FormData(form).get("password");
+  statusMessage.textContent = "";
+  button.disabled = true;
+  button.textContent = "جارٍ التحقق...";
+  try {
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({password}),
+    });
+    if (!response.ok) {
+      statusMessage.textContent = response.status === 401
+        ? "كلمة المرور غير صحيحة. تحقق منها وحاول مرة أخرى."
+        : "تعذر تسجيل الدخول الآن. حاول مجددًا بعد قليل.";
+      document.getElementById("adminPassword").focus();
+      return;
+    }
+    form.reset();
+    await loadRequests();
+  } catch {
+    statusMessage.textContent = "تعذر الاتصال بالخادم. تحقق من تشغيل الخدمة ثم حاول مجددًا.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "تسجيل الدخول";
+  }
+});
+document.getElementById("adminPassword").addEventListener("input", () => {
+  document.getElementById("loginStatus").textContent = "";
 });
 document.getElementById("requestList").addEventListener("click", async event => {
   const button = event.target.closest(".save-request"); if (!button) return;

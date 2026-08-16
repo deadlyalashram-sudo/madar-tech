@@ -258,7 +258,8 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 #loginStatus, #trackingStatus { min-height: 24px; color: #b42318; }
 .admin-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
 .toolbar-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.toolbar-actions select, .toolbar-actions button { min-height: 44px; padding: 0 14px; border: 1px solid #b9c6d3; background: #fff; font: inherit; cursor: pointer; }
+.toolbar-actions input, .toolbar-actions select, .toolbar-actions button { min-height: 44px; margin: 0; padding: 0 14px; border: 1px solid #b9c6d3; background: #fff; font: inherit; cursor: pointer; }
+.toolbar-actions input { width: min(290px, 100%); cursor: text; }
 .admin-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
 .admin-metrics div { display: grid; gap: 4px; padding: 20px; border: 1px solid var(--line); background: #fff; }
 .admin-metrics strong { font-size: 30px; }.admin-metrics span { color: var(--muted); }
@@ -269,6 +270,8 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 .request-card h2 { margin: 22px 0 6px; }.request-card > p { color: var(--muted); line-height: 1.8; }
 .request-card dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 20px 0; background: var(--line); border: 1px solid var(--line); }
 .request-card dl div { padding: 14px; background: #f8fafc; }.request-card dt { color: var(--muted); font-size: 12px; }.request-card dd { margin: 5px 0 0; font-weight: 700; }
+.request-contact { display: flex; gap: 8px; margin: -4px 0 16px; }
+.request-contact a { padding: 9px 15px; border: 1px solid var(--blue); color: var(--blue); font-size: 14px; font-weight: 700; }
 .request-actions { display: grid; grid-template-columns: 180px 1fr auto; gap: 10px; }
 .request-actions select, .request-actions textarea { border: 1px solid #b9c6d3; padding: 10px; font: inherit; }
 .request-actions textarea { min-height: 48px; resize: vertical; }.request-actions button { border: 0; padding: 0 20px; font: inherit; font-weight: 700; cursor: pointer; }

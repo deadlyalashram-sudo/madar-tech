@@ -23,7 +23,7 @@ Run the API and website together:
 - API docs: `http://127.0.0.1:8082/api/docs`
 
 Before production, set strong environment values for `MADAR_ADMIN_PASSWORD` and
-`MADAR_SESSION_SECRET`. The local development password is `ChangeMe123!`.
+`MADAR_SESSION_SECRET`. Local credentials are read from the ignored `.env` file.
 
 ## Business configuration
 
@@ -32,4 +32,4 @@ requests are stored in the local SQLite database and managed from `/admin`.
 GitHub Pages can host only the static public page; production request tracking
 requires deploying `server.py` on a Python hosting service.
 
-See `DEPLOYMENT.md` for the free Koyeb deployment configuration.
+See `DEPLOYMENT.md` for the Render Blueprint and manual deployment settings.

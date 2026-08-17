@@ -51,7 +51,8 @@ document.querySelectorAll("[data-request-type]").forEach((link) => {
 
 document.getElementById("quoteForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  const data = new FormData(event.currentTarget);
+  const form = event.currentTarget;
+  const data = new FormData(form);
   const english = document.documentElement.lang === "en";
   const localPhone = String(data.get("phone")).replace(/\s|-/g, "");
   const status = document.getElementById("formStatus");
@@ -59,10 +60,10 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
     status.textContent = english
       ? "Enter a valid Saudi mobile number, such as 05xxxxxxxx."
       : "أدخل رقم جوال سعودي صحيح مثل 05xxxxxxxx.";
-    event.currentTarget.elements.phone.focus();
+    form.elements.phone.focus();
     return;
   }
-  const button = event.currentTarget.querySelector('button[type="submit"]');
+  const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
   status.textContent = english ? "Sending your request..." : "جارٍ إرسال طلبك...";
   fetch("/api/requests", {
@@ -81,7 +82,7 @@ document.getElementById("quoteForm").addEventListener("submit", (event) => {
     status.innerHTML = english
       ? `Request received. Your tracking number is <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">Track request</a>`
       : `تم استلام طلبك. رقم المتابعة <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">متابعة الطلب</a>`;
-    event.currentTarget.reset();
+    form.reset();
   }).catch(() => {
     status.textContent = english
       ? "We could not send the request. Please try again."

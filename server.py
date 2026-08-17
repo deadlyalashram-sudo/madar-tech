@@ -197,6 +197,8 @@ def create_request(payload: ServiceRequestCreate):
 @app.get("/api/requests/track")
 def track_request(ticket_code: str, phone: str):
     normalized = phone.replace(" ", "").replace("-", "")
+    if len(normalized) < 4 or not normalized.isdigit():
+        raise HTTPException(status_code=400, detail="Enter the last 4 digits of the phone number")
     with engine.connect() as connection:
         row = connection.execute(text(
             "SELECT ticket_code, service, city, status, admin_note, created_at, updated_at, phone "

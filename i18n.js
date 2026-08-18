@@ -25,19 +25,20 @@ const translations = {
   "اختبار وشرح لما تم تنفيذه.": "Every completed task is tested and explained.",
   "متابعة حقيقية": "Real follow-up",
   "نبقى معك بعد انتهاء الخدمة.": "We stay available after service completion.",
-  "م": "M",
-  "مدار التقنية": "Madar Tech",
+  "ع": "A",
+  "عبدالله التقنية": "Abdullah Tech",
   "الخدمات": "Services",
   "الباقات": "Plans",
   "التغطية": "Coverage",
   "طريقة العمل": "How it works",
-  "اطلب عرض سعر": "Request a quote",
+  "ابدأ الآن": "Get Started",
+  "من نحن": "About",
   "خدمة ميدانية للأفراد والمنشآت": "On-site service for homes and businesses",
   "تقنيتك تعمل.": "Technology that works.",
   "وأنت مرتاح.": "Peace of mind included.",
   "تقنيتك تعمل.\nوأنت مرتاح.": "Technology that works.\nPeace of mind included.",
   "تركيب وصيانة كاميرات المراقبة، أجهزة الكمبيوتر، الشبكات والسيرفرات في المنطقة الشرقية.": "CCTV, computer, network, and server installation and maintenance across the Eastern Province.",
-  "اطلب معاينة": "Request an inspection",
+  "احجز معاينة": "Book an Inspection",
   "تواصل واتساب": "WhatsApp us",
   "تشخيص واضح قبل التنفيذ": "Clear diagnosis before work begins",
   "تسليم مرتب واختبار كامل": "Organized handover and full testing",
@@ -79,7 +80,8 @@ const translations = {
   "تشخيص واضح": "Clear diagnosis",
   "عرض تكلفة قبل الإصلاح": "Cost approval before repair",
   "اختبار بعد التنفيذ": "Testing after completion",
-  "اطلب زيارة": "Request a visit",
+  "احجز زيارة": "Book a Visit",
+  "احصل على عرض سعر": "Get a Quote",
   "الأكثر طلبًا": "Most requested",
   "تجهيز متكامل": "Complete setup",
   "للمنازل والمتاجر والمكاتب الجديدة.": "For new homes, shops, and offices.",
@@ -93,6 +95,16 @@ const translations = {
   "متابعة الأعطال": "Issue follow-up",
   "تقارير بالأعمال المنفذة": "Service reports",
   "ناقش خطة دعم": "Discuss a support plan",
+  "خبرة تقنية تصل إلى موقعك": "Technical expertise delivered to your location",
+  "عبدالله التقنية تقدم حلولًا عملية للأفراد والمنشآت، من التشخيص والتركيب إلى الاختبار والمتابعة بعد الخدمة.": "Abdullah Tech provides practical solutions for homes and businesses, from diagnosis and installation to testing and post-service support.",
+  "حلول واضحة": "Clear solutions",
+  "نشرح المشكلة والحل والتكلفة قبل التنفيذ.": "We explain the issue, solution, and cost before work begins.",
+  "تنفيذ منظم": "Organized execution",
+  "تركيب مرتب واختبار فعلي قبل التسليم.": "Clean installation and real testing before handover.",
+  "خدمة ميدانية": "On-site service",
+  "تغطية مدن المنطقة الشرقية حسب الموعد.": "Coverage across Eastern Province cities by appointment.",
+  "متابعة مستمرة": "Continued follow-up",
+  "نبقى معك للملاحظات المتعلقة بالخدمة.": "We remain available for service-related feedback.",
   "نغطي المنطقة الشرقية": "Serving the Eastern Province",
   "خدمة ميدانية أقرب وأسرع": "Faster, more accessible on-site service",
   "نستقبل طلبات الأفراد والمنشآت في مدن المنطقة الشرقية، وننسق موعد الزيارة حسب المدينة ونوع العمل.": "We serve homes and businesses across the Eastern Province and schedule visits based on the city and scope of work.",
@@ -147,7 +159,7 @@ function translatePage(language) {
   document.documentElement.lang = language;
   document.documentElement.dir = english ? "ltr" : "rtl";
   document.body.classList.toggle("english", english);
-  document.title = english ? "Madar Tech | Technical Services in the Eastern Province" : "مدار التقنية | خدمات تقنية في المنطقة الشرقية";
+  document.title = english ? "Abdullah Tech | Technical Services in the Eastern Province" : "عبدالله التقنية | خدمات تقنية في المنطقة الشرقية";
   document.querySelector('meta[name="description"]').content = english
     ? "CCTV, computer, network, and server services across the Eastern Province."
     : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في المنطقة الشرقية.";

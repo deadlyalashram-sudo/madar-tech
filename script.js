@@ -80,8 +80,8 @@ function whatsappPhone(value) {
 
 function deliveryMessage(ticketCode, english) {
   return english
-    ? `Madar Tech request ${ticketCode}. Track it at https://madar-tech-viok.onrender.com/track`
-    : `رقم طلبك لدى مدار التقنية: ${ticketCode}\nمتابعة الطلب: https://madar-tech-viok.onrender.com/track`;
+    ? `Abdullah Tech request ${ticketCode}. Track it at https://madar-tech-viok.onrender.com/track`
+    : `رقم طلبك لدى عبدالله التقنية: ${ticketCode}\nمتابعة الطلب: https://madar-tech-viok.onrender.com/track`;
 }
 
 function copyText(value) {
@@ -218,7 +218,7 @@ quoteForm.addEventListener("submit", (event) => {
     const message = deliveryMessage(result.ticket_code, english);
     const whatsappUrl = `https://wa.me/${whatsappPhone(data.get("phone"))}?text=${encodeURIComponent(message)}`;
     const email = String(data.get("email") || "").trim();
-    const emailUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(english ? "Madar Tech tracking number" : "رقم طلب مدار التقنية")}&body=${encodeURIComponent(message)}`;
+    const emailUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(english ? "Abdullah Tech tracking number" : "رقم طلب عبدالله التقنية")}&body=${encodeURIComponent(message)}`;
     status.innerHTML = `<div class="request-success">
       <span>${english ? "Request received" : "تم استلام طلبك"}</span>
       <strong class="ticket-number" dir="ltr">${result.ticket_code}</strong>

@@ -42,7 +42,7 @@ COOKIE_SECURE = os.getenv("MADAR_COOKIE_SECURE", "false").lower() == "true"
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
-app = FastAPI(title="Madar Service Center", docs_url="/api/docs")
+app = FastAPI(title="Abdullah Tech Service Center", docs_url="/api/docs")
 app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
 
 

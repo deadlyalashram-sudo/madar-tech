@@ -1,4 +1,4 @@
-# Madar Tech
+# Abdullah Tech
 
 Bilingual Arabic and English one-page website for technical field services in Saudi Arabia's Eastern Province.
 

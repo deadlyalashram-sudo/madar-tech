@@ -84,6 +84,19 @@ function deliveryMessage(ticketCode, english) {
     : `رقم طلبك لدى مدار التقنية: ${ticketCode}\nمتابعة الطلب: https://madar-tech-viok.onrender.com/track`;
 }
 
+function copyText(value) {
+  const temporary = document.createElement("textarea");
+  temporary.value = value;
+  temporary.setAttribute("readonly", "");
+  temporary.style.position = "fixed";
+  temporary.style.opacity = "0";
+  document.body.appendChild(temporary);
+  temporary.select();
+  const copied = document.execCommand("copy");
+  temporary.remove();
+  return copied;
+}
+
 function updateSummary() {
   const labels = isEnglish()
     ? [["Service", "service"], ["City", "city"], ["Method", "visitType"], ["Appointment", "visitDay"], ["Time", "timing"]]
@@ -217,9 +230,11 @@ quoteForm.addEventListener("submit", (event) => {
         <a href="/track">${english ? "Track request" : "متابعة الطلب"}</a>
       </div>
     </div>`;
-    status.querySelector(".copy-ticket").addEventListener("click", async (copyEvent) => {
-      await navigator.clipboard.writeText(copyEvent.currentTarget.dataset.ticket);
-      copyEvent.currentTarget.textContent = english ? "Copied" : "تم النسخ";
+    status.querySelector(".copy-ticket").addEventListener("click", (copyEvent) => {
+      const copied = copyText(copyEvent.currentTarget.dataset.ticket);
+      copyEvent.currentTarget.textContent = copied
+        ? (english ? "Copied" : "تم النسخ")
+        : (english ? "Copy manually" : "انسخ الرقم يدويًا");
     });
     form.reset();
     sessionStorage.removeItem(draftKey);

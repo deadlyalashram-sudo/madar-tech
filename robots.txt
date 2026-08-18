@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+Disallow: /track
+
+Sitemap: https://madar-tech-viok.onrender.com/sitemap.xml

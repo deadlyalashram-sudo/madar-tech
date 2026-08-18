@@ -46,6 +46,18 @@ app = FastAPI(title="Abdullah Tech Service Center", docs_url="/api/docs")
 app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
 
 
+@app.middleware("http")
+async def privacy_and_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["X-Frame-Options"] = "DENY"
+    if request.url.path.startswith(("/admin", "/api", "/track")):
+        response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet"
+        response.headers["Cache-Control"] = "no-store"
+    return response
+
+
 def init_db() -> None:
     id_definition = (
         "INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -172,7 +184,7 @@ def admin_page():
 
 @app.get("/{filename}")
 def static_file(filename: str):
-    allowed = {"styles.css", "enhancements.css", "script.js", "i18n.js", "admin.js", "tracking.js"}
+    allowed = {"styles.css", "enhancements.css", "script.js", "i18n.js", "admin.js", "tracking.js", "robots.txt", "sitemap.xml"}
     if filename not in allowed:
         raise HTTPException(status_code=404)
     return FileResponse(ROOT / filename)

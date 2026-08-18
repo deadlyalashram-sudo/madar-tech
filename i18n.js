@@ -82,6 +82,8 @@ const translations = {
   "فحص وصيانة": "Inspection and repair",
   "للمشكلة المحددة أو الجهاز الواحد.": "For a specific issue or a single device.",
   "تبدأ من 99 ريال": "Starting from SAR 99",
+  "يبدأ من 499 ريال": "Starting from SAR 499",
+  "يبدأ من 399 ريال شهريًا": "Starting from SAR 399/month",
   "تشخيص واضح": "Clear diagnosis",
   "عرض تكلفة قبل الإصلاح": "Cost approval before repair",
   "اختبار بعد التنفيذ": "Testing after completion",

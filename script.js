@@ -99,8 +99,8 @@ function copyText(value) {
 
 function updateSummary() {
   const labels = isEnglish()
-    ? [["Service", "service"], ["City", "city"], ["Method", "visitType"], ["Appointment", "visitDay"], ["Time", "timing"]]
-    : [["الخدمة", "service"], ["المدينة", "city"], ["طريقة الخدمة", "visitType"], ["الموعد", "visitDay"], ["الفترة", "timing"]];
+    ? [["Service", "service"], ["City", "city"], ["Method", "visitType"], ["Appointment", "visitDay"], ["Time", "timing"], ["Payment", "paymentMethod"]]
+    : [["الخدمة", "service"], ["المدينة", "city"], ["طريقة الخدمة", "visitType"], ["الموعد", "visitDay"], ["الفترة", "timing"], ["الدفع", "paymentMethod"]];
   requestSummary.innerHTML = `<h3>${isEnglish() ? "Request summary" : "ملخص طلبك"}</h3>` + labels.map(([label, name]) =>
     `<div><span>${label}</span><strong>${selectedText(name)}</strong></div>`
   ).join("");
@@ -133,6 +133,7 @@ quoteForm.addEventListener("input", (event) => {
   event.target.classList.remove("invalid");
   stepError.textContent = "";
   saveDraft();
+  if (currentStep === 3) updateSummary();
 });
 
 restoreDraft();
@@ -210,7 +211,7 @@ quoteForm.addEventListener("submit", (event) => {
       customer_type: data.get("customerType"), city: data.get("city"),
       service: data.get("service"), visit_type: data.get("visitType"),
       visit_day: data.get("visitDay"), timing: data.get("timing"),
-      details: data.get("details"),
+      details: data.get("details"), payment_method: data.get("paymentMethod"),
     }),
   }).then(async response => {
     if (!response.ok) throw new Error("request_failed");

@@ -29,7 +29,7 @@ function renderRequests() {
     <article class="request-card" data-id="${Number(item.id)}">
       <div class="request-card-head"><div><strong>${escapeHtml(item.ticket_code)}</strong><span>${new Date(item.created_at).toLocaleString("ar-SA")}</span></div><span class="status-badge status-${escapeHtml(item.status)}">${escapeHtml(labels[item.status] || item.status)}</span></div>
       <h2>${escapeHtml(item.service)}</h2><p>${escapeHtml(item.details)}</p>
-      <dl><div><dt>العميل</dt><dd>${escapeHtml(item.name)}</dd></div><div><dt>الجوال</dt><dd dir="ltr">${escapeHtml(item.phone)}</dd></div><div><dt>الموقع</dt><dd>${escapeHtml(item.city)}</dd></div><div><dt>الموعد</dt><dd>${escapeHtml(item.visit_day)}، ${escapeHtml(item.timing)}</dd></div><div><dt>طريقة الخدمة</dt><dd>${escapeHtml(item.visit_type)}</dd></div><div><dt>نوع العميل</dt><dd>${escapeHtml(item.customer_type)}</dd></div></dl>
+      <dl><div><dt>العميل</dt><dd>${escapeHtml(item.name)}</dd></div><div><dt>الجوال</dt><dd dir="ltr">${escapeHtml(item.phone)}</dd></div><div><dt>الموقع</dt><dd>${escapeHtml(item.city)}</dd></div><div><dt>الموعد</dt><dd>${escapeHtml(item.visit_day)}، ${escapeHtml(item.timing)}</dd></div><div><dt>طريقة الخدمة</dt><dd>${escapeHtml(item.visit_type)}</dd></div><div><dt>طريقة الدفع</dt><dd>${escapeHtml(item.payment_method || "يحدد لاحقًا")}</dd></div><div><dt>نوع العميل</dt><dd>${escapeHtml(item.customer_type)}</dd></div></dl>
       <div class="request-contact"><a href="tel:${escapeHtml(item.phone)}">اتصال</a><a href="https://wa.me/${normalizedPhone(item.phone)}?text=${encodeURIComponent(`مرحبًا ${item.name}، بخصوص طلبك ${item.ticket_code} لدى عبدالله التقنية.`)}" target="_blank" rel="noopener">واتساب</a></div>
       <div class="request-actions"><select class="request-status">${Object.entries(labels).map(([value,label])=>`<option value="${value}" ${value===item.status?"selected":""}>${label}</option>`).join("")}</select><textarea class="admin-note" placeholder="ملاحظة تظهر للعميل">${escapeHtml(item.admin_note||"")}</textarea><button class="save-request primary">حفظ التحديث</button></div>
     </article>`).join("") : `<div class="empty-state">لا توجد طلبات مطابقة للبحث أو الفلتر.</div>`;
@@ -88,7 +88,7 @@ document.getElementById("statusFilter").addEventListener("change",loadRequests);
 document.getElementById("requestSearch").addEventListener("input",renderRequests);
 document.getElementById("exportRequests").addEventListener("click", () => {
   const rows = filteredRequests();
-  const columns = ["ticket_code","name","phone","customer_type","city","service","visit_type","visit_day","timing","status","created_at"];
+  const columns = ["ticket_code","name","phone","customer_type","city","service","visit_type","visit_day","timing","payment_method","status","created_at"];
   const csv = [columns.join(","), ...rows.map(item => columns.map(column => `"${String(item[column] ?? "").replaceAll('"','""')}"`).join(","))].join("\r\n");
   const link = document.createElement("a");
   link.href = URL.createObjectURL(new Blob(["\ufeff", csv], {type: "text/csv;charset=utf-8"}));

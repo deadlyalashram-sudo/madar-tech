@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, inspect, text
 
 
 ROOT = Path(__file__).resolve().parent
@@ -65,6 +65,7 @@ def init_db() -> None:
                 visit_type TEXT NOT NULL,
                 visit_day TEXT NOT NULL,
                 timing TEXT NOT NULL,
+                payment_method TEXT NOT NULL DEFAULT 'يحدد لاحقًا',
                 details TEXT NOT NULL,
                 status TEXT NOT NULL DEFAULT 'new',
                 admin_note TEXT NOT NULL DEFAULT '',
@@ -72,6 +73,11 @@ def init_db() -> None:
                 updated_at TEXT NOT NULL
             )
             """))
+        columns = {column["name"] for column in inspect(connection).get_columns("service_requests")}
+        if "payment_method" not in columns:
+            connection.execute(text(
+                "ALTER TABLE service_requests ADD COLUMN payment_method TEXT NOT NULL DEFAULT 'يحدد لاحقًا'"
+            ))
 
 
 init_db()
@@ -86,6 +92,7 @@ class ServiceRequestCreate(BaseModel):
     visit_type: str = Field(min_length=2, max_length=100)
     visit_day: str = Field(min_length=2, max_length=60)
     timing: str = Field(min_length=2, max_length=60)
+    payment_method: str = Field(default="يحدد لاحقًا", min_length=2, max_length=60)
     details: str = Field(min_length=10, max_length=2000)
 
     @field_validator("phone")
@@ -179,16 +186,17 @@ def create_request(payload: ServiceRequestCreate):
         connection.execute(text("""
             INSERT INTO service_requests (
                 ticket_code, name, phone, customer_type, city, service,
-                visit_type, visit_day, timing, details, created_at, updated_at
+                visit_type, visit_day, timing, payment_method, details, created_at, updated_at
             ) VALUES (
                 :ticket_code, :name, :phone, :customer_type, :city, :service,
-                :visit_type, :visit_day, :timing, :details, :created_at, :updated_at
+                :visit_type, :visit_day, :timing, :payment_method, :details, :created_at, :updated_at
             )
             """), {
                 "ticket_code": code, "name": payload.name, "phone": payload.phone,
                 "customer_type": payload.customer_type, "city": payload.city,
                 "service": payload.service, "visit_type": payload.visit_type,
                 "visit_day": payload.visit_day, "timing": payload.timing,
+                "payment_method": payload.payment_method,
                 "details": payload.details, "created_at": now, "updated_at": now,
             })
     return {"ticket_code": code, "status": "new"}

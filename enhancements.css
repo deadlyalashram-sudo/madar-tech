@@ -109,6 +109,17 @@ body { overflow-x: hidden; }
 .service-grid article::after { content: ""; position: absolute; inset-inline-start: 0; top: 0; width: 4px; height: 0; background: var(--blue); transition: height .25s ease; }
 .service-grid article:hover { background: #f9fbff; }
 .service-grid article:hover::after { height: 100%; }
+.service-price {
+  display: block;
+  width: fit-content;
+  margin: -2px 0 16px;
+  padding: 7px 10px;
+  color: var(--blue);
+  background: rgba(21, 94, 239, .08);
+  border-inline-start: 3px solid var(--blue);
+  font-size: 15px;
+}
+.pricing-note { margin: 16px 0 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
 .plan-grid article { transition: transform .2s ease, box-shadow .2s ease; }
 .plan-grid article:hover { transform: translateY(-5px); box-shadow: 0 18px 45px rgba(7,21,37,.1); }
 .coverage { background: var(--navy); }
@@ -165,8 +176,9 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 .faq details[open] { background: #f8faff; padding-inline: 18px; }
 
 @media (max-width: 800px) {
-  .menu-toggle { display: block; margin-inline-start: auto; }
+  .menu-toggle { display: block; margin-inline-start: 0; }
   .language-toggle { margin-inline-start: 0; }
+  .header-action { display: inline-flex; min-height: 40px; margin-inline-start: auto; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
   .site-header nav {
     display: none;
     position: absolute;
@@ -191,7 +203,7 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 
 @media (max-width: 480px) {
   .site-header { padding-inline: 16px; gap: 10px; }
-  .brand strong { font-size: 17px; }
+  .brand strong { display: none; }
   .brand span { width: 34px; height: 34px; }
   .promise-strip { width: calc(100% - 32px); grid-template-columns: 1fr; }
   .promise-strip div { border-inline-end: 0; border-bottom: 1px solid var(--line); }

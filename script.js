@@ -71,6 +71,19 @@ function selectedText(name) {
   return field.selectedOptions?.[0]?.textContent || field.value;
 }
 
+function whatsappPhone(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  if (digits.startsWith("966")) return digits;
+  if (digits.startsWith("0")) return `966${digits.slice(1)}`;
+  return digits;
+}
+
+function deliveryMessage(ticketCode, english) {
+  return english
+    ? `Madar Tech request ${ticketCode}. Track it at https://madar-tech-viok.onrender.com/track`
+    : `رقم طلبك لدى مدار التقنية: ${ticketCode}\nمتابعة الطلب: https://madar-tech-viok.onrender.com/track`;
+}
+
 function updateSummary() {
   const labels = isEnglish()
     ? [["Service", "service"], ["City", "city"], ["Method", "visitType"], ["Appointment", "visitDay"], ["Time", "timing"]]
@@ -189,9 +202,25 @@ quoteForm.addEventListener("submit", (event) => {
   }).then(async response => {
     if (!response.ok) throw new Error("request_failed");
     const result = await response.json();
-    status.innerHTML = english
-      ? `Request received. Your tracking number is <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">Track request</a>`
-      : `تم استلام طلبك. رقم المتابعة <strong dir="ltr">${result.ticket_code}</strong>. <a href="/track">متابعة الطلب</a>`;
+    const message = deliveryMessage(result.ticket_code, english);
+    const whatsappUrl = `https://wa.me/${whatsappPhone(data.get("phone"))}?text=${encodeURIComponent(message)}`;
+    const email = String(data.get("email") || "").trim();
+    const emailUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(english ? "Madar Tech tracking number" : "رقم طلب مدار التقنية")}&body=${encodeURIComponent(message)}`;
+    status.innerHTML = `<div class="request-success">
+      <span>${english ? "Request received" : "تم استلام طلبك"}</span>
+      <strong class="ticket-number" dir="ltr">${result.ticket_code}</strong>
+      <p>${english ? "Save the number now so you can track your request later." : "احفظ الرقم الآن حتى تستطيع متابعة طلبك لاحقًا."}</p>
+      <div class="delivery-actions">
+        <a class="delivery-whatsapp" href="${whatsappUrl}" target="_blank" rel="noopener">${english ? "Save in WhatsApp" : "حفظ في واتساب"}</a>
+        ${email ? `<a href="${emailUrl}">${english ? "Send by email" : "إرسال بالبريد"}</a>` : ""}
+        <button type="button" class="copy-ticket" data-ticket="${result.ticket_code}">${english ? "Copy number" : "نسخ الرقم"}</button>
+        <a href="/track">${english ? "Track request" : "متابعة الطلب"}</a>
+      </div>
+    </div>`;
+    status.querySelector(".copy-ticket").addEventListener("click", async (copyEvent) => {
+      await navigator.clipboard.writeText(copyEvent.currentTarget.dataset.ticket);
+      copyEvent.currentTarget.textContent = english ? "Copied" : "تم النسخ";
+    });
     form.reset();
     sessionStorage.removeItem(draftKey);
     showStep(1);

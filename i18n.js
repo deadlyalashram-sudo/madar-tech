@@ -10,6 +10,8 @@ const translations = {
   "يكفي وصف مختصر من 10 أحرف على الأقل.": "A short description of at least 10 characters is enough.",
   "بيانات التواصل والتأكيد": "Contact details and confirmation",
   "سنستخدمها للتواصل معك وتحديث حالة الطلب.": "We will use these details to contact you and update the request status.",
+  "البريد الإلكتروني (اختياري)": "Email address (optional)",
+  "أضفه إذا رغبت في إرسال رقم الطلب إلى بريدك.": "Add it if you want to send the tracking number to your email.",
   "رجوع": "Back",
   "التالي": "Next",
   "تأكيد وإرسال الطلب": "Confirm and submit request",
@@ -134,7 +136,8 @@ const translations = {
 
 const placeholders = {
   "اسمك أو اسم المنشأة": "Your name or business name",
-  "اشرح المشكلة أو العمل المطلوب باختصار": "Briefly describe the issue or required work"
+  "اشرح المشكلة أو العمل المطلوب باختصار": "Briefly describe the issue or required work",
+  "name@example.com": "name@example.com"
 };
 
 let currentLanguage = localStorage.getItem("siteLanguage") || "ar";

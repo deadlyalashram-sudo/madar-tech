@@ -13,7 +13,7 @@ const translations = {
   "رجوع": "Back",
   "التالي": "Next",
   "تأكيد وإرسال الطلب": "Confirm and submit request",
-  "نستقبل طلبات الجبيل الآن": "Now accepting requests in Jubail",
+  "نستقبل طلبات المنطقة الشرقية الآن": "Now accepting requests across the Eastern Province",
   "ضمانات الخدمة": "Service guarantees",
   "فحص قبل التنفيذ": "Inspect before work",
   "نعرف سبب المشكلة قبل اقتراح الحل.": "We identify the cause before recommending a solution.",
@@ -34,7 +34,7 @@ const translations = {
   "تقنيتك تعمل.": "Technology that works.",
   "وأنت مرتاح.": "Peace of mind included.",
   "تقنيتك تعمل.\nوأنت مرتاح.": "Technology that works.\nPeace of mind included.",
-  "تركيب وصيانة كاميرات المراقبة، أجهزة الكمبيوتر، الشبكات والسيرفرات في الجبيل.": "CCTV, computer, network, and server installation and maintenance in Jubail.",
+  "تركيب وصيانة كاميرات المراقبة، أجهزة الكمبيوتر، الشبكات والسيرفرات في المنطقة الشرقية.": "CCTV, computer, network, and server installation and maintenance across the Eastern Province.",
   "اطلب معاينة": "Request an inspection",
   "تواصل واتساب": "WhatsApp us",
   "تشخيص واضح قبل التنفيذ": "Clear diagnosis before work begins",
@@ -91,11 +91,11 @@ const translations = {
   "متابعة الأعطال": "Issue follow-up",
   "تقارير بالأعمال المنفذة": "Service reports",
   "ناقش خطة دعم": "Discuss a support plan",
-  "نبدأ من الجبيل": "Starting in Jubail",
-  "خدمة محلية أقرب وأسرع": "Faster, more focused local service",
-  "نركّز حاليًا على الجبيل لتقديم مواعيد أوضح وخدمة أسرع. يمكن مناقشة المشاريع في المدن المجاورة حسب حجم العمل والموعد.": "We currently focus on Jubail for clearer appointments and faster service. Projects in nearby cities can be discussed based on scope and schedule.",
-  "الجبيل البلد": "Jubail City", "الجبيل الصناعية": "Jubail Industrial City", "الأحياء السكنية": "Residential areas", "المتاجر والمكاتب": "Shops and offices",
-  "الجبيل": "Jubail", "الدمام": "Dammam", "الخبر": "Khobar", "الظهران": "Dhahran", "القطيف": "Qatif", "رأس تنورة": "Ras Tanura",
+  "نغطي المنطقة الشرقية": "Serving the Eastern Province",
+  "خدمة ميدانية أقرب وأسرع": "Faster, more accessible on-site service",
+  "نستقبل طلبات الأفراد والمنشآت في مدن المنطقة الشرقية، وننسق موعد الزيارة حسب المدينة ونوع العمل.": "We serve homes and businesses across the Eastern Province and schedule visits based on the city and scope of work.",
+  "الخبر والظهران": "Khobar and Dhahran", "القطيف والأحساء": "Qatif and Al Ahsa",
+  "الجبيل": "Jubail", "الدمام": "Dammam", "الخبر": "Khobar", "الظهران": "Dhahran", "القطيف": "Qatif", "الأحساء": "Al Ahsa", "رأس تنورة": "Ras Tanura", "بقيق": "Abqaiq", "الخفجي": "Khafji", "النعيرية": "Al Nairyah",
   "من المشكلة إلى التسليم": "From issue to handover",
   "أرسل التفاصيل": "Send the details",
   "حدد الخدمة والموقع وأرفق صور المشكلة إن وجدت.": "Choose the service and location, and attach issue photos if available.",
@@ -111,7 +111,7 @@ const translations = {
   "لن يبدأ أي عمل قبل توضيح الحل والتكلفة والمدة المتوقعة.": "No work begins before the solution, cost, and expected timeline are confirmed.",
   "الاسم": "Name", "رقم الجوال": "Mobile number", "نوع العميل": "Customer type", "المدينة": "City", "الخدمة": "Service", "طريقة تقديم الخدمة": "Service method", "اليوم المناسب": "Preferred day", "الفترة المناسبة": "Preferred period", "تفاصيل الطلب": "Request details",
   "اختر نوع العميل": "Select customer type", "فرد / منزل": "Individual / Home", "متجر": "Shop", "مكتب أو شركة": "Office or company", "منشأة أخرى": "Other business",
-  "اختر المدينة": "Select city", "مدينة أخرى": "Other city", "اختر الخدمة": "Select service", "أكثر من خدمة": "Multiple services",
+  "اختر المدينة": "Select city", "مدينة أخرى في المنطقة الشرقية": "Another city in the Eastern Province", "اختر الخدمة": "Select service", "أكثر من خدمة": "Multiple services",
   "اختر طريقة الخدمة": "Select service method", "زيارة ميدانية للموقع": "On-site visit", "دعم عن بُعد": "Remote support", "تسليم الجهاز للصيانة": "Device drop-off for repair", "أحتاج استشارة أولاً": "I need a consultation first",
   "اختر اليوم المناسب": "Select preferred day", "اليوم": "Today", "غداً": "Tomorrow", "خلال هذا الأسبوع": "This week", "موعد آخر بالتنسيق": "Another arranged date",
   "اختر الفترة": "Select time period", "مساءً (5 - 8)": "Evening (5 - 8 PM)", "مساءً (8 - 12)": "Evening (8 PM - 12 AM)", "في أقرب وقت خلال ساعات العمل": "As soon as possible during working hours",
@@ -126,7 +126,7 @@ const translations = {
   "نعم، نخدم المنازل والمتاجر والمكاتب والمنشآت الصغيرة والمتوسطة بحسب حجم ومتطلبات العمل.": "Yes. We serve homes, shops, offices, and small to medium businesses based on project requirements.",
   "هل يوجد دعم بعد التنفيذ؟": "Is post-service support available?",
   "نعم، تتم متابعة الملاحظات المتعلقة بالعمل المنفذ وفق نطاق الخدمة المتفق عليه.": "Yes. Feedback related to completed work is handled according to the agreed service scope.",
-  "خدمات تقنية عملية للأفراد والمنشآت في الجبيل.": "Practical technical services for homes and businesses in Jubail.",
+  "خدمات تقنية عملية للأفراد والمنشآت في المنطقة الشرقية.": "Practical technical services for homes and businesses across the Eastern Province.",
   "التواصل": "Contact", "واتساب مباشر": "Direct WhatsApp", "ساعات استقبال الطلبات": "Request hours", "السبت–الخميس": "Saturday–Thursday", "5:00 م – 12:00 ص": "5:00 PM – 12:00 AM",
   "لا يبدأ العمل قبل توضيح النطاق والتكلفة وموافقة العميل.": "Work begins only after scope, pricing, and customer approval are confirmed.",
   "جميع الحقوق محفوظة": "All rights reserved"
@@ -144,10 +144,10 @@ function translatePage(language) {
   document.documentElement.lang = language;
   document.documentElement.dir = english ? "ltr" : "rtl";
   document.body.classList.toggle("english", english);
-  document.title = english ? "Madar Tech | Technical Services in Jubail" : "مدار التقنية | خدمات تقنية في الجبيل";
+  document.title = english ? "Madar Tech | Technical Services in the Eastern Province" : "مدار التقنية | خدمات تقنية في المنطقة الشرقية";
   document.querySelector('meta[name="description"]').content = english
-    ? "CCTV, computer, network, and server services in Jubail."
-    : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في الجبيل.";
+    ? "CCTV, computer, network, and server services across the Eastern Province."
+    : "خدمات كاميرات المراقبة والكمبيوتر والشبكات والسيرفرات في المنطقة الشرقية.";
 
   document.querySelectorAll("body *:not(script):not(style)").forEach((element) => {
     element.childNodes.forEach((node) => {

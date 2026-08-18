@@ -230,6 +230,7 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 .floating-whatsapp:hover { background: #08693b; transform: translateY(-2px); }
 
 @media (max-width: 480px) {
+  body { padding-bottom: 76px; }
   .floating-whatsapp { inset-inline: 16px; bottom: 14px; }
 }
 
@@ -280,6 +281,50 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--blue
 .tracking-card { margin-top: 28px; padding: 24px; border: 1px solid var(--line); background: #f8fafc; }.tracking-card h2 { direction: ltr; text-align: right; }
 .empty-state { padding: 70px 20px; text-align: center; background: #fff; color: var(--muted); border: 1px solid var(--line); }
 .form-status a { color: var(--blue); text-decoration: underline; }.form-status strong { display: inline-block; padding: 2px 5px; }
+
+/* Short, mobile-friendly service request flow. */
+.request-wizard { align-content: start; }
+.wizard-progress { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 8px; }
+.wizard-progress span { position: relative; display: grid; justify-items: center; gap: 7px; color: var(--muted); font-style: normal; font-size: 13px; }
+.wizard-progress span:not(:last-child)::after { content: ""; position: absolute; top: 17px; inset-inline-start: calc(50% + 22px); width: calc(100% - 44px); height: 2px; background: var(--line); }
+.wizard-progress b { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border: 2px solid var(--line); background: #fff; border-radius: 50%; }
+.wizard-progress em { font-style: normal; font-weight: 700; }
+.wizard-progress .active, .wizard-progress .complete { color: var(--blue); }
+.wizard-progress .active b, .wizard-progress .complete b { border-color: var(--blue); }
+.wizard-progress .complete b { background: var(--blue); color: #fff; }
+.wizard-progress .complete::after { background: var(--blue) !important; }
+.wizard-step { display: none; grid-column: 1/-1; padding: 0; margin: 0; border: 0; min-width: 0; }
+.wizard-step.active { display: block; animation: wizard-in .18s ease-out; }
+.wizard-step legend { width: 100%; padding: 9px 0 20px; }
+.wizard-step legend strong, .wizard-step legend small { display: block; }
+.wizard-step legend strong { font-size: 22px; }
+.wizard-step legend small { margin-top: 6px; color: var(--muted); font-weight: 400; line-height: 1.6; }
+.step-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.step-fields label { min-width: 0; }
+.field-hint { display: block; margin-top: 7px; color: var(--muted); font-weight: 400; }
+.wizard-actions { display: flex; gap: 12px; padding-top: 4px; }
+.wizard-actions button { min-height: 48px; padding: 11px 24px; border: 1px solid var(--line); font: inherit; font-weight: 700; cursor: pointer; }
+.wizard-actions .primary { flex: 1; }
+.wizard-back { background: #fff; color: var(--ink); }
+.wizard-actions button[hidden] { display: none; }
+.step-error { min-height: 20px; margin: -5px 0 0; color: #b42318; font-size: 14px; }
+.request-wizard input.invalid, .request-wizard select.invalid, .request-wizard textarea.invalid { border-color: #d92d20; outline: 2px solid #fee4e2; outline-offset: 1px; }
+.request-summary { margin-top: 20px; padding: 18px; background: var(--soft); border: 1px solid var(--line); }
+.request-summary h3 { margin: 0 0 12px; font-size: 18px; }
+.request-summary div { display: flex; justify-content: space-between; gap: 20px; padding: 9px 0; border-top: 1px solid var(--line); }
+.request-summary span { color: var(--muted); }
+.request-summary strong { text-align: end; }
+@keyframes wizard-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+  .step-fields { grid-template-columns: 1fr; }
+  .step-fields > * { grid-column: 1; }
+  .wizard-step legend strong { font-size: 20px; }
+  .wizard-progress em { font-size: 12px; }
+  .wizard-actions { flex-wrap: wrap; }
+  .wizard-back { min-width: 92px; }
+  .request-summary div { align-items: flex-start; }
+}
 
 @media (max-width: 760px) {
   .portal-header, .admin-toolbar { align-items: stretch; flex-direction: column; }

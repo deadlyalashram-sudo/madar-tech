@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=8">
-  <link rel="stylesheet" href="enhancements.css?v=8">
+  <link rel="stylesheet" href="enhancements.css?v=9">
 </head>
 <body>
   <header class="site-header">
@@ -80,17 +80,43 @@
 
     <section class="quote-section" id="quote">
       <div class="quote-copy"><p class="eyebrow">ابدأ الآن</p><h2>صف لنا احتياجك، ونرتب الباقي</h2><p>أكمل النموذج لتحصل فورًا على رقم طلب يمكنك استخدامه لمتابعة الحالة والتحديثات.</p><div class="notice">لن يبدأ أي عمل قبل توضيح الحل والتكلفة والمدة المتوقعة.</div></div>
-      <form id="quoteForm">
-        <label>الاسم<input name="name" required minlength="2" placeholder="اسمك أو اسم المنشأة"></label>
-        <label>رقم الجوال<input name="phone" inputmode="tel" required placeholder="05xxxxxxxx"></label>
-        <label>نوع العميل<select name="customerType" required><option value="">اختر نوع العميل</option><option>فرد / منزل</option><option>متجر</option><option>مكتب أو شركة</option><option>منشأة أخرى</option></select></label>
-        <label>المدينة<select name="city" required><option value="">اختر المدينة</option><option>الجبيل</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>القطيف</option><option>رأس تنورة</option><option>مدينة أخرى</option></select></label>
-        <label>الخدمة<select name="service" required><option value="">اختر الخدمة</option><option>كاميرات المراقبة</option><option>صيانة الكمبيوتر</option><option>الشبكات والراوترات</option><option>السيرفرات والتخزين</option><option>أكثر من خدمة</option></select></label>
-        <label>طريقة تقديم الخدمة<select name="visitType" required><option value="">اختر طريقة الخدمة</option><option>زيارة ميدانية للموقع</option><option>دعم عن بُعد</option><option>تسليم الجهاز للصيانة</option><option>أحتاج استشارة أولاً</option></select></label>
-        <label>اليوم المناسب<select name="visitDay" required><option value="">اختر اليوم المناسب</option><option>اليوم</option><option>غداً</option><option>خلال هذا الأسبوع</option><option>موعد آخر بالتنسيق</option></select></label>
-        <label>الفترة المناسبة<select name="timing" required><option value="">اختر الفترة</option><option>مساءً (5 - 8)</option><option>مساءً (8 - 12)</option><option>في أقرب وقت خلال ساعات العمل</option></select></label>
-        <label class="full">تفاصيل الطلب<textarea name="details" required minlength="10" placeholder="اشرح المشكلة أو العمل المطلوب باختصار"></textarea></label>
-        <button class="primary full" type="submit">إرسال طلب الخدمة</button>
+      <form id="quoteForm" class="request-wizard" novalidate>
+        <div class="wizard-progress full" aria-label="خطوات طلب الخدمة">
+          <span class="active" data-progress="1"><b>1</b><em>الخدمة</em></span>
+          <span data-progress="2"><b>2</b><em>الموعد</em></span>
+          <span data-progress="3"><b>3</b><em>التأكيد</em></span>
+        </div>
+        <fieldset class="wizard-step full active" data-step="1">
+          <legend><strong>ماذا تحتاج؟</strong><small>اختر الخدمة وموقعها، ويمكنك تعديلها لاحقًا.</small></legend>
+          <div class="step-fields">
+            <label>الخدمة<select name="service" required><option value="">اختر الخدمة</option><option>كاميرات المراقبة</option><option>صيانة الكمبيوتر</option><option>الشبكات والراوترات</option><option>السيرفرات والتخزين</option><option>أكثر من خدمة</option></select></label>
+            <label>نوع العميل<select name="customerType" required><option value="">اختر نوع العميل</option><option>فرد / منزل</option><option>متجر</option><option>مكتب أو شركة</option><option>منشأة أخرى</option></select></label>
+            <label class="full">المدينة<select name="city" required><option value="">اختر المدينة</option><option>الجبيل</option><option>الدمام</option><option>الخبر</option><option>الظهران</option><option>القطيف</option><option>رأس تنورة</option><option>مدينة أخرى</option></select></label>
+          </div>
+        </fieldset>
+        <fieldset class="wizard-step full" data-step="2">
+          <legend><strong>اختر الموعد</strong><small>ساعات استقبال الطلبات من 5 مساءً إلى 12 ليلًا.</small></legend>
+          <div class="step-fields">
+            <label>طريقة تقديم الخدمة<select name="visitType" required><option value="">اختر طريقة الخدمة</option><option>زيارة ميدانية للموقع</option><option>دعم عن بُعد</option><option>تسليم الجهاز للصيانة</option><option>أحتاج استشارة أولاً</option></select></label>
+            <label>اليوم المناسب<select name="visitDay" required><option value="">اختر اليوم المناسب</option><option>اليوم</option><option>غداً</option><option>خلال هذا الأسبوع</option><option>موعد آخر بالتنسيق</option></select></label>
+            <label>الفترة المناسبة<select name="timing" required><option value="">اختر الفترة</option><option>مساءً (5 - 8)</option><option>مساءً (8 - 12)</option><option>في أقرب وقت خلال ساعات العمل</option></select></label>
+            <label class="full">تفاصيل الطلب<textarea name="details" required minlength="10" placeholder="اشرح المشكلة أو العمل المطلوب باختصار"></textarea><small class="field-hint">يكفي وصف مختصر من 10 أحرف على الأقل.</small></label>
+          </div>
+        </fieldset>
+        <fieldset class="wizard-step full" data-step="3">
+          <legend><strong>بيانات التواصل والتأكيد</strong><small>سنستخدمها للتواصل معك وتحديث حالة الطلب.</small></legend>
+          <div class="step-fields">
+            <label>الاسم<input name="name" required minlength="2" autocomplete="name" placeholder="اسمك أو اسم المنشأة"></label>
+            <label>رقم الجوال<input name="phone" inputmode="tel" autocomplete="tel" required placeholder="05xxxxxxxx"></label>
+          </div>
+          <div class="request-summary" id="requestSummary" aria-live="polite"></div>
+        </fieldset>
+        <div class="wizard-actions full">
+          <button class="wizard-back" id="wizardBack" type="button" hidden>رجوع</button>
+          <button class="primary wizard-next" id="wizardNext" type="button">التالي</button>
+          <button class="primary wizard-submit" id="wizardSubmit" type="submit" hidden>تأكيد وإرسال الطلب</button>
+        </div>
+        <p class="step-error full" id="stepError" role="alert"></p>
         <p class="form-status full" id="formStatus" role="status"></p>
       </form>
     </section>
@@ -115,7 +141,7 @@
     <div class="footer-hours"><strong>ساعات استقبال الطلبات</strong><span>السبت–الخميس</span><span>5:00 م – 12:00 ص</span></div>
     <div class="footer-legal"><span>© <b id="year"></b> جميع الحقوق محفوظة</span><small>لا يبدأ العمل قبل توضيح النطاق والتكلفة وموافقة العميل.</small></div>
   </footer>
-  <script src="i18n.js?v=8"></script>
-  <script src="script.js?v=9"></script>
+  <script src="i18n.js?v=9"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>

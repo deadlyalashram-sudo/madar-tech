@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /api
 Disallow: /track
 
-Sitemap: https://abdullah-tech.pages.dev/sitemap.xml
+Sitemap: https://abdullah-tech.onrender.com/sitemap.xml

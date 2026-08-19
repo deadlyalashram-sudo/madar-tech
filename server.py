@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request, Response, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
@@ -44,6 +45,16 @@ engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 app = FastAPI(title="Abdullah Tech Service Center", docs_url="/api/docs")
 app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
+
+# The public website is hosted separately so it stays fast even when this API
+# has been idle. Admin access remains same-origin on this service.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
 
 
 @app.middleware("http")

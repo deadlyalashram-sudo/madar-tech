@@ -11,6 +11,10 @@ const wizardSubmit = document.getElementById("wizardSubmit");
 const stepError = document.getElementById("stepError");
 const requestSummary = document.getElementById("requestSummary");
 const draftKey = "madarRequestDraft";
+const apiBase = String(window.ABDULLAH_TECH_API_BASE || "").replace(/\/$/, "");
+const publicBase = String(window.ABDULLAH_TECH_PUBLIC_BASE || window.location.origin).replace(/\/$/, "");
+const apiUrl = (path) => `${apiBase}${path}`;
+const trackingUrl = `${apiBase}/track`;
 let currentStep = 1;
 
 function isEnglish() {
@@ -80,8 +84,8 @@ function whatsappPhone(value) {
 
 function deliveryMessage(ticketCode, english) {
   return english
-    ? `Abdullah Tech request ${ticketCode}. Track it at https://madar-tech-viok.onrender.com/track`
-    : `رقم طلبك لدى عبدالله التقنية: ${ticketCode}\nمتابعة الطلب: https://madar-tech-viok.onrender.com/track`;
+    ? `Abdullah Tech request ${ticketCode}. Track it at ${trackingUrl}`
+    : `رقم طلبك لدى عبدالله التقنية: ${ticketCode}\nمتابعة الطلب: ${trackingUrl}`;
 }
 
 function copyText(value) {
@@ -203,7 +207,7 @@ quoteForm.addEventListener("submit", (event) => {
   const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
   status.textContent = english ? "Sending your request..." : "جارٍ إرسال طلبك...";
-  fetch("/api/requests", {
+  fetch(apiUrl("/api/requests"), {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
@@ -228,7 +232,7 @@ quoteForm.addEventListener("submit", (event) => {
         <a class="delivery-whatsapp" href="${whatsappUrl}" target="_blank" rel="noopener">${english ? "Save in WhatsApp" : "حفظ في واتساب"}</a>
         ${email ? `<a href="${emailUrl}">${english ? "Send by email" : "إرسال بالبريد"}</a>` : ""}
         <button type="button" class="copy-ticket" data-ticket="${result.ticket_code}">${english ? "Copy number" : "نسخ الرقم"}</button>
-        <a href="/track">${english ? "Track request" : "متابعة الطلب"}</a>
+        <a href="${trackingUrl}">${english ? "Track request" : "متابعة الطلب"}</a>
       </div>
     </div>`;
     status.querySelector(".copy-ticket").addEventListener("click", (copyEvent) => {

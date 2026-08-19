@@ -4,4 +4,4 @@ Disallow: /admin
 Disallow: /api
 Disallow: /track
 
-Sitemap: https://madar-tech-viok.onrender.com/sitemap.xml
+Sitemap: https://abdullah-tech.pages.dev/sitemap.xml

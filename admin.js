@@ -2,6 +2,7 @@ const labels = {new:"جديد",contacted:"تم التواصل",scheduled:"مجد
 const loginPanel = document.getElementById("loginPanel");
 const workspace = document.getElementById("adminWorkspace");
 let loadedRequests = [];
+let lastKnownRequestId = 0;
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>'"]/g, character => ({
@@ -37,11 +38,27 @@ function renderRequests() {
 
 async function loadRequests() {
   const filter = document.getElementById("statusFilter").value;
-  const response = await fetch(`/api/admin/requests${filter ? `?status_filter=${filter}` : ""}`);
-  if (response.status === 401) { loginPanel.hidden = false; workspace.hidden = true; return; }
-  loadedRequests = await response.json();
-  loginPanel.hidden = true; workspace.hidden = false;
-  renderRequests();
+  try {
+    const response = await fetch(`/api/admin/requests${filter ? `?status_filter=${filter}` : ""}`, {cache:"no-store"});
+    if (response.status === 401) { loginPanel.hidden = false; workspace.hidden = true; return; }
+    if (!response.ok) return;
+    const requests = await response.json();
+    const newestId = requests.reduce((highest,item)=>Math.max(highest,Number(item.id)||0),0);
+    if (lastKnownRequestId && newestId > lastKnownRequestId) {
+      document.title = "طلب جديد | عبدالله التقنية";
+    }
+    lastKnownRequestId = Math.max(lastKnownRequestId,newestId);
+    loadedRequests = requests;
+    loginPanel.hidden = true; workspace.hidden = false;
+    renderRequests();
+  } catch (_) {
+    // Keep the current list visible and retry automatically on the next cycle.
+  }
+}
+
+function canAutoRefresh() {
+  const active = document.activeElement;
+  return !document.hidden && !active?.closest?.(".request-actions");
 }
 
 document.getElementById("loginForm").addEventListener("submit", async event => {
@@ -98,4 +115,6 @@ document.getElementById("exportRequests").addEventListener("click", () => {
 });
 document.getElementById("refreshRequests").addEventListener("click",loadRequests);
 document.getElementById("logoutButton").addEventListener("click",async()=>{await fetch("/api/admin/logout",{method:"POST"});location.reload();});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadRequests();});
+setInterval(()=>{if(canAutoRefresh()&&!workspace.hidden)loadRequests();},10000);
 loadRequests();

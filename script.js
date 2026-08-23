@@ -20,7 +20,7 @@ let currentStep = 1;
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 async function submitRequestWithRetry(payload, onRetry) {
-  const retryDelays = [0, 4000, 8000, 12000];
+  const retryDelays = [0, 3000, 6000];
   let lastError;
 
   for (let attempt = 0; attempt < retryDelays.length; attempt += 1) {
@@ -30,11 +30,15 @@ async function submitRequestWithRetry(payload, onRetry) {
     }
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 7000);
       const response = await fetch(apiUrl("/api/requests"), {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (response.ok) return response.json();
 

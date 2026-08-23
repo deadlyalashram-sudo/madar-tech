@@ -17,6 +17,40 @@ const apiUrl = (path) => `${apiBase}${path}`;
 const trackingUrl = `${apiBase}/track`;
 let currentStep = 1;
 
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+async function submitRequestWithRetry(payload, onRetry) {
+  const retryDelays = [0, 4000, 8000, 12000];
+  let lastError;
+
+  for (let attempt = 0; attempt < retryDelays.length; attempt += 1) {
+    if (retryDelays[attempt]) {
+      onRetry(attempt + 1, retryDelays.length);
+      await wait(retryDelays[attempt]);
+    }
+
+    try {
+      const response = await fetch(apiUrl("/api/requests"), {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) return response.json();
+
+      // A sleeping free service normally returns a temporary gateway response.
+      if (![502, 503, 504].includes(response.status)) {
+        throw new Error(`request_failed_${response.status}`);
+      }
+      lastError = new Error(`temporary_server_${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("request_failed");
+}
+
 function isEnglish() {
   return document.documentElement.lang === "en";
 }
@@ -189,7 +223,7 @@ document.querySelectorAll("[data-request-type]").forEach((link) => {
   });
 });
 
-quoteForm.addEventListener("submit", (event) => {
+quoteForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.currentTarget;
   if (!validateStep(3)) return;
@@ -207,19 +241,18 @@ quoteForm.addEventListener("submit", (event) => {
   const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
   status.textContent = english ? "Sending your request..." : "جارٍ إرسال طلبك...";
-  fetch(apiUrl("/api/requests"), {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
+  try {
+    const result = await submitRequestWithRetry({
       name: data.get("name"), phone: data.get("phone"),
       customer_type: data.get("customerType"), city: data.get("city"),
       service: data.get("service"), visit_type: data.get("visitType"),
       visit_day: data.get("visitDay"), timing: data.get("timing"),
       details: data.get("details"), payment_method: data.get("paymentMethod"),
-    }),
-  }).then(async response => {
-    if (!response.ok) throw new Error("request_failed");
-    const result = await response.json();
+    }, (attempt, total) => {
+      status.textContent = english
+        ? `Preparing the request service, retrying (${attempt}/${total})...`
+        : `جارٍ تجهيز خدمة الطلبات وإعادة المحاولة (${attempt}/${total})...`;
+    });
     const message = deliveryMessage(result.ticket_code, english);
     const whatsappUrl = `https://wa.me/${whatsappPhone(data.get("phone"))}?text=${encodeURIComponent(message)}`;
     const email = String(data.get("email") || "").trim();
@@ -244,9 +277,11 @@ quoteForm.addEventListener("submit", (event) => {
     form.reset();
     sessionStorage.removeItem(draftKey);
     showStep(1);
-  }).catch(() => {
+  } catch {
     status.textContent = english
-      ? "We could not send the request. Please try again."
-      : "تعذر إرسال الطلب. حاول مرة أخرى.";
-  }).finally(() => { button.disabled = false; });
+      ? "The request service is temporarily unavailable. Your details are saved; please try again in a moment."
+      : "خدمة الطلبات مشغولة مؤقتًا. بياناتك محفوظة؛ حاول مرة أخرى بعد لحظة.";
+  } finally {
+    button.disabled = false;
+  }
 });

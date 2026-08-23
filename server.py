@@ -3,6 +3,7 @@ import hmac
 import os
 import secrets
 import time
+from collections import defaultdict, deque
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from fastapi import FastAPI, HTTPException, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import create_engine, inspect, text
 
@@ -40,29 +42,84 @@ ADMIN_PASSWORD = os.getenv("MADAR_ADMIN_PASSWORD", "ChangeMe123!")
 SESSION_SECRET = os.getenv("MADAR_SESSION_SECRET", "local-development-secret").encode()
 SESSION_MAX_AGE = 8 * 60 * 60
 COOKIE_SECURE = os.getenv("MADAR_COOKIE_SECURE", "false").lower() == "true"
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "MADAR_ALLOWED_ORIGINS",
+        "https://abdullah-tech.onrender.com,https://abdullah-tech.pages.dev",
+    ).split(",")
+    if origin.strip()
+]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "MADAR_ALLOWED_HOSTS",
+        "localhost,127.0.0.1,madar-tech-viok.onrender.com",
+    ).split(",")
+    if host.strip()
+]
+
+if COOKIE_SECURE:
+    if ADMIN_PASSWORD == "ChangeMe123!" or len(ADMIN_PASSWORD) < 12:
+        raise RuntimeError("Set MADAR_ADMIN_PASSWORD to a unique value of at least 12 characters")
+    if SESSION_SECRET == b"local-development-secret" or len(SESSION_SECRET) < 32:
+        raise RuntimeError("Set MADAR_SESSION_SECRET to a random value of at least 32 characters")
 
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
-app = FastAPI(title="Abdullah Tech Service Center", docs_url="/api/docs")
+app = FastAPI(
+    title="Abdullah Tech Service Center",
+    docs_url=None if COOKIE_SECURE else "/api/docs",
+    redoc_url=None,
+    openapi_url=None if COOKIE_SECURE else "/api/openapi.json",
+)
 app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
 
 # The public website is hosted separately so it stays fast even when this API
 # has been idle. Admin access remains same-origin on this service.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
 
+RATE_WINDOWS: dict[str, deque[float]] = defaultdict(deque)
+
+
+def enforce_rate_limit(request: Request, bucket: str, limit: int, window: int) -> None:
+    client_ip = request.client.host if request.client else "unknown"
+    key = f"{bucket}:{client_ip}"
+    now = time.monotonic()
+    attempts = RATE_WINDOWS[key]
+    while attempts and attempts[0] <= now - window:
+        attempts.popleft()
+    if len(attempts) >= limit:
+        raise HTTPException(status_code=429, detail="Too many requests. Try again later.")
+    attempts.append(now)
+
 
 @app.middleware("http")
 async def privacy_and_security_headers(request: Request, call_next):
+    content_length = request.headers.get("content-length")
+    if content_length and content_length.isdigit() and int(content_length) > 64 * 1024:
+        return Response("Request body too large", status_code=413)
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; img-src 'self' data:; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; "
+        "connect-src 'self' https://madar-tech-viok.onrender.com; "
+        "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    )
+    if COOKIE_SECURE:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     if request.url.path.startswith(("/admin", "/api", "/track")):
         response.headers["X-Robots-Tag"] = "noindex, nofollow, noarchive, nosnippet"
         response.headers["Cache-Control"] = "no-store"
@@ -132,7 +189,7 @@ class ServiceRequestCreate(BaseModel):
 
 
 class AdminLogin(BaseModel):
-    password: str
+    password: str = Field(min_length=1, max_length=256)
 
 
 class RequestUpdate(BaseModel):
@@ -149,7 +206,7 @@ class RequestUpdate(BaseModel):
 
 
 def ticket_code() -> str:
-    return f"MT-{datetime.now():%y%m}-{secrets.token_hex(2).upper()}"
+    return f"MT-{datetime.now():%y%m}-{secrets.token_hex(4).upper()}"
 
 
 def make_session() -> str:
@@ -195,14 +252,15 @@ def admin_page():
 
 @app.get("/{filename}")
 def static_file(filename: str):
-    allowed = {"styles.css", "enhancements.css", "script.js", "i18n.js", "admin.js", "tracking.js", "robots.txt", "sitemap.xml"}
+    allowed = {"styles.css", "enhancements.css", "script.js", "i18n.js", "admin.js", "tracking.js", "robots.txt", "sitemap.xml", "favicon.svg"}
     if filename not in allowed:
         raise HTTPException(status_code=404)
     return FileResponse(ROOT / filename)
 
 
 @app.post("/api/requests", status_code=201)
-def create_request(payload: ServiceRequestCreate):
+def create_request(payload: ServiceRequestCreate, request: Request):
+    enforce_rate_limit(request, "create-request", limit=8, window=10 * 60)
     now = datetime.now(timezone.utc).isoformat()
     code = ticket_code()
     with engine.begin() as connection:
@@ -226,7 +284,8 @@ def create_request(payload: ServiceRequestCreate):
 
 
 @app.get("/api/requests/track")
-def track_request(ticket_code: str, phone: str):
+def track_request(request: Request, ticket_code: str, phone: str):
+    enforce_rate_limit(request, "track-request", limit=30, window=10 * 60)
     normalized = phone.replace(" ", "").replace("-", "")
     if len(normalized) < 4 or not normalized.isdigit():
         raise HTTPException(status_code=400, detail="Enter the last 4 digits of the phone number")
@@ -243,7 +302,8 @@ def track_request(ticket_code: str, phone: str):
 
 
 @app.post("/api/admin/login")
-def admin_login(payload: AdminLogin, response: Response):
+def admin_login(payload: AdminLogin, response: Response, request: Request):
+    enforce_rate_limit(request, "admin-login", limit=8, window=15 * 60)
     if not hmac.compare_digest(payload.password, ADMIN_PASSWORD):
         raise HTTPException(status_code=401, detail="Incorrect password")
     response.set_cookie(

@@ -19,6 +19,10 @@ services:
         generateValue: true
       - key: MADAR_COOKIE_SECURE
         value: "true"
+      - key: MADAR_ALLOWED_ORIGINS
+        value: "https://abdullah-tech.onrender.com,https://abdullah-tech.pages.dev"
+      - key: MADAR_ALLOWED_HOSTS
+        value: "madar-tech-viok.onrender.com"
       - key: PYTHON_VERSION
         value: "3.12.11"
 

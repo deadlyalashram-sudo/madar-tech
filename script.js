@@ -32,13 +32,17 @@ async function submitRequestWithRetry(payload, onRetry) {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 7000);
-      const response = await fetch(apiUrl("/api/requests"), {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
+      let response;
+      try {
+        response = await fetch(apiUrl("/api/requests"), {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timeoutId);
+      }
 
       if (response.ok) return response.json();
 
